@@ -31,4 +31,11 @@ public class Room {
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = HouseKeeping.class)
     private List<HouseKeeping> tasks;
+
+    @ManyToMany
+    @JoinTable(
+            name = "room_booking",
+            joinColumns = @JoinColumn(name = "room_id"),
+            inverseJoinColumns = @JoinColumn(name = "booking_id"))
+    private List<Booking> bookings;
 }
