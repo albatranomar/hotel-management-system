@@ -1,9 +1,9 @@
 package com.hotel.management.application.entity;
 
 import java.sql.Date;
+import java.util.List;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,4 +21,7 @@ public class Employee {
     private Date dateOfBirth;
 
     private int salary;
+
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = HouseKeeping.class)
+    private List<HouseKeeping> tasks;
 }

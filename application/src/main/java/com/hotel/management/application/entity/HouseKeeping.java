@@ -1,23 +1,29 @@
 package com.hotel.management.application.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import java.sql.Date;
+
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-public class Feature {
+@Entity
+public class HouseKeeping {
     @Id
     private String id;
-    private String fnamee;
+
+    @ManyToOne
+    @JoinColumn(name = "employee_id")
+    private Employee employee;
 
     @ManyToOne
     @JoinColumn(name = "room_id")
     private Room room;
+
+    private String roomId, task, status;
+
+    private Date date;
 }

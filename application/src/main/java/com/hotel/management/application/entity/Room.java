@@ -28,4 +28,7 @@ public class Room {
     @ToString.Exclude
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = Facility.class)
     private List<Facility> facilities;
+
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = HouseKeeping.class)
+    private List<HouseKeeping> tasks;
 }
