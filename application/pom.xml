@@ -14,7 +14,7 @@
 	<name>application</name>
 	<description>The Hotel Management System is designed to streamline operations for both hotel employees and guests. It offers functionalities for the customers, i.e., searching the available rooms, reservations, customer check-ins and check-outs, and invoice generation.</description>
 	<properties>
-		<java.version>22</java.version>
+		<java.version>17</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -86,6 +86,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+		<finalName>spring_rest_docker</finalName>
 	</build>
 
 </project>
