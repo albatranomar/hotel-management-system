@@ -22,11 +22,11 @@ public class Room {
     private Double cost;
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = Feature.class)
-    private List<Feature> stocks;
+    @ManyToMany
+    private List<Feature> features;
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = Facility.class)
+    @ManyToMany
     private List<Facility> facilities;
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = HouseKeeping.class)

@@ -1,12 +1,11 @@
 package com.hotel.management.application.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -15,9 +14,12 @@ import lombok.NoArgsConstructor;
 public class Feature {
     @Id
     private String id;
-    private String fnamee;
+    private String fname;
 
-    @ManyToOne
-    @JoinColumn(name = "room_id")
-    private Room room;
+    @ManyToMany
+    @JoinTable(
+            name = "room_feature",
+            joinColumns = @JoinColumn(name = "feature_id"),
+            inverseJoinColumns = @JoinColumn(name = "room_id"))
+    private List<Room> rooms;
 }
