@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -12,6 +13,10 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class Feature {
+    public Feature(String id, String fname) {
+        this(id, fname, new ArrayList<>());
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
