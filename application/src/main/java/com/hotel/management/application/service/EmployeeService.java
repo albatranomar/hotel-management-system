@@ -12,7 +12,7 @@ public interface EmployeeService {
 
     EmployeeDto addEmployee(EmployeeDto employeeDto);
 
-    EmployeeDto updateEmployee(EmployeeDto employeeDto);
+    EmployeeDto updateEmployee(String id, EmployeeDto employeeDto);
 
     void deleteEmployee(String id);
 

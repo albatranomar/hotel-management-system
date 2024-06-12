@@ -11,7 +11,7 @@ public interface PaymentService {
 
     PaymentDto addPayment(PaymentDto paymentDto);
 
-    PaymentDto updatePayment(PaymentDto paymentDto);
+    PaymentDto updatePayment(String id, PaymentDto paymentDto);
 
     void deletePayment(String id);
 }

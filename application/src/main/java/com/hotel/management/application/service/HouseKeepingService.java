@@ -11,7 +11,7 @@ public interface HouseKeepingService {
 
     HouseKeepingDto addHouseKeeping(HouseKeepingDto houseKeepingDto);
 
-    HouseKeepingDto updateHouseKeeping(HouseKeepingDto houseKeepingDto);
+    HouseKeepingDto updateHouseKeeping(String id, HouseKeepingDto houseKeepingDto);
 
     void deleteHouseKeepingById(String id);
 }
