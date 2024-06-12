@@ -23,7 +23,7 @@ public class HouseKeeping {
     @JoinColumn(name = "room_id")
     private Room room;
 
-    private String roomId, task, status;
+    private String task, status;
 
     private Date date;
 }
