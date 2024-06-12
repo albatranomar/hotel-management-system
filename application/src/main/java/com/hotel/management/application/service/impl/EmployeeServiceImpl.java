@@ -48,7 +48,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             employee.setSalary(employeeDto.getSalary());
             employee.setDateOfBirth(employeeDto.getDateOfBirth());
         } catch (IllegalArgumentException ex) {
-            throw new BadRequestException("Invalid value for status provided.");
+            throw new BadRequestException("Invalid value provided.");
         }
 
         return mapToDto(employeeRepository.save(employee));
