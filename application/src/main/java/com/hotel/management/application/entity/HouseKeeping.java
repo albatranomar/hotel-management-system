@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @Entity
 public class HouseKeeping {
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
     @ManyToOne

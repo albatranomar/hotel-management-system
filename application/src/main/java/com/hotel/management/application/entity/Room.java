@@ -14,6 +14,7 @@ import java.util.List;
 @Data
 public class Room {
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     private Integer no;
     private String type;

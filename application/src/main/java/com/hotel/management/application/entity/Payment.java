@@ -1,8 +1,6 @@
 package com.hotel.management.application.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class Payment {
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     private String payment_status;
 

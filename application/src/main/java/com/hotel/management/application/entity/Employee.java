@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Employee {
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
     private String fname, lname, phoneNo, email;

@@ -13,6 +13,7 @@ import java.util.List;
 @Entity
 public class Booking {
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
     @ManyToOne

@@ -13,6 +13,7 @@ import java.util.List;
 @Data
 public class Feature {
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     private String fname;
 

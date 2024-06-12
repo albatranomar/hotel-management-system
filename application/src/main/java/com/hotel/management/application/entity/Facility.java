@@ -13,6 +13,7 @@ import java.util.List;
 @Data
 public class Facility {
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     private String fname;
 
