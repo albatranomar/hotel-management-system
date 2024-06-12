@@ -1,7 +1,9 @@
 package com.hotel.management.application.repository;
 
 import com.hotel.management.application.entity.Feature;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface FeatureRepository extends CrudRepository<Feature, String> {
+@Repository
+public interface FeatureRepository extends JpaRepository<Feature, String> {
 }

@@ -1,8 +1,9 @@
 package com.hotel.management.application.repository;
 
-import org.springframework.data.repository.CrudRepository;
-
+import org.springframework.data.jpa.repository.JpaRepository;
 import com.hotel.management.application.entity.Room;
+import org.springframework.stereotype.Repository;
 
-public interface RoomRepository extends CrudRepository<Room, String> {
+@Repository
+public interface RoomRepository extends JpaRepository<Room, String> {
 }
