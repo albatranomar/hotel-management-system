@@ -27,7 +27,7 @@ public class User {
     @NotNull
     private String email, password;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = Booking.class)
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = Booking.class)
     private List<Booking> bookings;
 
     public static enum Roles {
