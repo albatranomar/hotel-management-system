@@ -10,7 +10,7 @@ import java.util.List;
 public class BookingDto {
     private String id;
 
-    private UserDto user;
+    private UserDto customer;
 
     private List<RoomDto> rooms;
 }
