@@ -5,7 +5,7 @@ import com.hotel.management.application.dto.PaymentDto;
 import java.util.List;
 
 public interface PaymentService {
-    PaymentDto getPayment(String id);
+    PaymentDto getPaymentById(String id);
 
     List<PaymentDto> getAllPayments();
 
