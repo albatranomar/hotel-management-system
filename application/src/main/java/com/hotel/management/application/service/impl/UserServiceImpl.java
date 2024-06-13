@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> getAllUsers() {
         List<User> users = userRepository.findAll();
-        return users.stream().map(this::mapToDto).toList();
+        return users.stream().map(UserServiceImpl::mapToDto).toList();
     }
 
     @Override
@@ -62,12 +62,12 @@ public class UserServiceImpl implements UserService {
         return userRepository.getBookings(id);
     }
 
-    private UserDto mapToDto(User user) {
+    public static UserDto mapToDto(User user) {
         if (user == null) return null;
         return new UserDto(user.getId(), user.getRole(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getPassword());
     }
 
-    private User mapToEntity(UserDto userDto) {
+    public static User mapToEntity(UserDto userDto) {
         if (userDto == null) return null;
 
         return new User(userDto.getId(), userDto.getRole(), userDto.getFirstName(), userDto.getLastName(), userDto.getEmail(), userDto.getPassword());
