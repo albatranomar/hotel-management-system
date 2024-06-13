@@ -6,9 +6,11 @@ import com.hotel.management.application.exception.BadRequestException;
 import com.hotel.management.application.exception.ResourceNotFoundException;
 import com.hotel.management.application.repository.HouseKeepingRepository;
 import com.hotel.management.application.service.HouseKeepingService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class HouseKeepingServiceImpl implements HouseKeepingService {
     private final HouseKeepingRepository houseKeepingRepository;
 
