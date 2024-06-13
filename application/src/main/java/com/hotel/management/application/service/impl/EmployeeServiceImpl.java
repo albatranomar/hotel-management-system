@@ -28,7 +28,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public List<EmployeeDto> getAllEmployees() {
         List<Employee> employees = employeeRepository.findAll();
-        return employees.stream().map(this::mapToDto).toList();
+        return employees.stream().map(EmployeeServiceImpl::mapToDto).toList();
     }
 
     @Override
@@ -38,7 +38,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeDto updateEmployee(String id, EmployeeDto employeeDto) {
-        Employee employee = employeeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Employee", "id", id));
+        Employee employee = employeeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Employee"
+                , "id", id));
 
         try {
             employee.setFname(employeeDto.getFname());
@@ -64,13 +65,16 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeRepository.findHouseKeepingByEmployeeId(id);
     }
 
-    private EmployeeDto mapToDto(Employee employee) {
+    public static EmployeeDto mapToDto(Employee employee) {
         if (employee == null) return null;
-        return new EmployeeDto(employee.getId(), employee.getFname(), employee.getLname(), employee.getPhoneNo(), employee.getEmail(), employee.getDateOfBirth(), employee.getSalary());
+        return new EmployeeDto(employee.getId(), employee.getFname(), employee.getLname(), employee.getPhoneNo(),
+                employee.getEmail(), employee.getDateOfBirth(), employee.getSalary());
     }
 
-    private Employee mapToEntity(EmployeeDto employeeDto) {
+    public static Employee mapToEntity(EmployeeDto employeeDto) {
         if (employeeDto == null) return null;
-        return new Employee(employeeDto.getId(), employeeDto.getFname(), employeeDto.getLname(), employeeDto.getPhoneNo(), employeeDto.getEmail(), employeeDto.getDateOfBirth(), employeeDto.getSalary());
+        return new Employee(employeeDto.getId(), employeeDto.getFname(), employeeDto.getLname(),
+                employeeDto.getPhoneNo(), employeeDto.getEmail(), employeeDto.getDateOfBirth(),
+                employeeDto.getSalary());
     }
 }

@@ -28,7 +28,7 @@ public class RoomServiceImpl implements RoomService {
     public List<RoomDto> getAllRooms() {
         List<Room> rooms = roomRepository.findAll();
 
-        return rooms.stream().map(this::mapToDto).toList();
+        return rooms.stream().map(RoomServiceImpl::mapToDto).toList();
     }
 
     @Override
@@ -58,7 +58,7 @@ public class RoomServiceImpl implements RoomService {
         return roomRepository.existsById(id);
     }
 
-    public RoomDto mapToDto(Room room) {
+    public static RoomDto mapToDto(Room room) {
         if (room == null) return null;
 
         return new RoomDto(
@@ -73,12 +73,8 @@ public class RoomServiceImpl implements RoomService {
         );
     }
 
-    public Room mapToEntity(RoomDto roomDto) {
+    public static Room mapToEntity(RoomDto roomDto) {
         if (roomDto == null) return null;
-
-        if (roomRepository.existsById(roomDto.getId())) {
-            return roomRepository.findById(roomDto.getId()).orElse(null);
-        }
 
         return new Room(
                 roomDto.getId(),
