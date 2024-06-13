@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface FacilityService {
     List<FacilityDto> getAllFacilities();
-    FacilityDto getFacilityById();
+    FacilityDto getFacilityById(String id);
     FacilityDto updateFacilityById(String id, FacilityDto facilityDto);
     void deleteFacilityById(String id);
     FacilityDto createFacility(FacilityDto facilityDto);
