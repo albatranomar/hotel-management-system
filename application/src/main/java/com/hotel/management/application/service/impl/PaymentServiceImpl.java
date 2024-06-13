@@ -38,7 +38,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public PaymentDto updatePayment(String id, PaymentDto paymentDto) {
-        Payment payment = paymentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Employee"
+        Payment payment = paymentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Payment"
                 , "id", id));
 
         try {

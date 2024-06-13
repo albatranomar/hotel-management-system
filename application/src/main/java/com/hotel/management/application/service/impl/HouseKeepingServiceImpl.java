@@ -40,7 +40,7 @@ public class HouseKeepingServiceImpl implements HouseKeepingService {
     @Override
     public HouseKeepingDto updateHouseKeeping(String id, HouseKeepingDto houseKeepingDto) {
         HouseKeeping houseKeeping =
-                houseKeepingRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Employee", "id",
+                houseKeepingRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("HouseKeeping", "id",
                         id));
 
         try {
