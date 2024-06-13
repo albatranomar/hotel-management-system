@@ -1,6 +1,5 @@
 package com.hotel.management.application.service.impl;
 
-import com.hotel.management.application.dto.BookingDto;
 import com.hotel.management.application.dto.UserDto;
 import com.hotel.management.application.entity.Booking;
 import com.hotel.management.application.entity.User;

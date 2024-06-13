@@ -5,9 +5,11 @@ import com.hotel.management.application.entity.Room;
 import com.hotel.management.application.exception.ResourceNotFoundException;
 import com.hotel.management.application.repository.RoomRepository;
 import com.hotel.management.application.service.RoomService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class RoomServiceImpl implements RoomService {
     private final RoomRepository roomRepository;
 
