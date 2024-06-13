@@ -1,9 +1,7 @@
 package com.hotel.management.application.service.impl;
 
-import com.hotel.management.application.dto.FacilityDto;
 import com.hotel.management.application.dto.FeatureDto;
 import com.hotel.management.application.entity.Feature;
-import com.hotel.management.application.entity.User;
 import com.hotel.management.application.exception.BadRequestException;
 import com.hotel.management.application.exception.ResourceNotFoundException;
 import com.hotel.management.application.repository.FeatureRepository;
@@ -30,7 +28,7 @@ public class FeatureServiceImpl implements FeatureService {
     @Override
     public List<FeatureDto> getAllFeatures() {
         List<Feature> features = featureRepository.findAll();
-        return features.stream().map(this::mapToDto).toList();
+        return features.stream().map(FeatureServiceImpl::mapToDto).toList();
     }
 
     @Override
@@ -60,13 +58,13 @@ public class FeatureServiceImpl implements FeatureService {
         return featureRepository.existsById(id);
     }
 
-    public FeatureDto mapToDto(Feature feature) {
+    public static FeatureDto mapToDto(Feature feature) {
         if (feature == null) return null;
 
         return new FeatureDto(feature.getId(), feature.getFname());
     }
 
-    public Feature mapToEntity(FeatureDto featureDto) {
+    public static Feature mapToEntity(FeatureDto featureDto) {
         if (featureDto == null) return null;
 
         return new Feature(featureDto.getId(), featureDto.getFname());

@@ -28,7 +28,7 @@ public class FacilityServiceImpl implements FacilityService {
     @Override
     public List<FacilityDto> getAllFacilities() {
         List<Facility> facilities = facilityRepository.findAll();
-        return facilities.stream().map(this::mapToDto).toList();
+        return facilities.stream().map(FacilityServiceImpl::mapToDto).toList();
     }
 
     @Override
@@ -58,13 +58,13 @@ public class FacilityServiceImpl implements FacilityService {
         return facilityRepository.existsById(id);
     }
 
-    public FacilityDto mapToDto(Facility facility) {
+    public static FacilityDto mapToDto(Facility facility) {
         if (facility == null) return null;
 
         return new FacilityDto(facility.getId(), facility.getFname());
     }
 
-    public Facility mapToEntity(FacilityDto facilityDto) {
+    public static Facility mapToEntity(FacilityDto facilityDto) {
         if (facilityDto == null) return null;
 
         return new Facility(facilityDto.getId(), facilityDto.getFname());
