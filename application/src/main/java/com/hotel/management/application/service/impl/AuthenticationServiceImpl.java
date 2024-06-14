@@ -7,6 +7,7 @@ import com.hotel.management.application.dto.auth.AuthenticationResponseDto;
 import com.hotel.management.application.dto.auth.RegisterRequestDto;
 import com.hotel.management.application.entity.user.Token;
 import com.hotel.management.application.entity.user.User;
+import com.hotel.management.application.exception.BadRequestException;
 import com.hotel.management.application.exception.ResourceNotFoundException;
 import com.hotel.management.application.repository.TokenRepository;
 import com.hotel.management.application.repository.UserRepository;
@@ -34,7 +35,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public AuthenticationResponseDto register(RegisterRequestDto request) {
-        var user = User.builder()
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) throw new BadRequestException("User already registered!");
+
+
+        User user = User.builder()
                 .firstName(request.getFirstname())
                 .lastName(request.getLastname())
                 .email(request.getEmail())
@@ -52,8 +56,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     public AuthenticationResponseDto authenticate(AuthenticationRequestDto request) {
-        //Attempts to authenticate the passed Authentication object, returning a
-        // fully populated Authentication object (including granted authorities) if successful.
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow(() -> new ResourceNotFoundException("User", "email", request.getEmail()));
         String jwtToken = jwtService.generateToken(user);
@@ -70,9 +72,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         final String refreshToken;
         final String userEmail;
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return;
-        }
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) return;
+
         refreshToken = authHeader.substring(7);
         userEmail = jwtService.extractUsername(refreshToken);
         if (userEmail == null) return;
