@@ -1,6 +1,7 @@
 package com.hotel.management.application.config;
 
 import com.hotel.management.application.repository.TokenRepository;
+import com.hotel.management.application.service.auth.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,11 +27,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final TokenRepository tokenRepository;
 
     @Override
-    protected void doFilterInternal(
-            @NonNull HttpServletRequest request,
-            @NonNull HttpServletResponse response,
-            @NonNull FilterChain filterChain
-    ) throws ServletException, IOException {
+    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
         //skip processing the authentication for requests that
         // are intended for the authentication endpoint.
         if (request.getServletPath().contains("/api/v1/auth")) {
