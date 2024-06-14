@@ -3,6 +3,7 @@ package com.hotel.management.application.service.impl.auth;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hotel.management.application.dto.auth.AuthenticationRequestDto;
 import com.hotel.management.application.dto.auth.AuthenticationResponseDto;
+import com.hotel.management.application.dto.auth.ChangePasswordDto;
 import com.hotel.management.application.dto.auth.RegisterRequestDto;
 import com.hotel.management.application.entity.user.Token;
 import com.hotel.management.application.entity.user.User;
@@ -16,8 +17,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -68,9 +71,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        final String refreshToken;
-        final String userEmail;
+        String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+        String refreshToken;
+        String userEmail;
         if (authHeader == null || !authHeader.startsWith("Bearer "))
             throw new BadRequestException("Missing Authorization header.");
 
@@ -89,6 +92,47 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String accessToken = jwtService.generateToken(user);
         revokeAllUserTokens(user);
         saveUserToken(user, accessToken);
+        var authResponse = AuthenticationResponseDto.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
+
+        new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
+    }
+
+    @Override
+    public void changePassword(HttpServletRequest request, HttpServletResponse response, ChangePasswordDto changePasswordDto) throws IOException {
+        String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+        String accessToken;
+        String userEmail;
+        if (authHeader == null || !authHeader.startsWith("Bearer "))
+            throw new BadRequestException("Missing Authorization header.");
+
+        accessToken = authHeader.substring(7);
+        try {
+            userEmail = jwtService.extractUsername(accessToken);
+        } catch (Exception e) {
+            throw new AccessDeniedException("Invalid access token.");
+        }
+        if (userEmail == null)
+            throw new AccessDeniedException("Invalid access token.");
+
+        User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new ResourceNotFoundException("User", "email", userEmail));
+        if (!jwtService.isTokenValid(accessToken, user)) return;
+
+        if (!passwordEncoder.matches(changePasswordDto.getOldPassword(), user.getPassword()))
+            throw new BadRequestException("Wrong password.");
+
+        if (!changePasswordDto.getNewPassword().equals(changePasswordDto.getConfirmPassword()))
+            throw new BadRequestException("Password and confirmation password don't match.");
+
+        user.setPassword(passwordEncoder.encode(changePasswordDto.getNewPassword()));
+
+        String newAccessToken = jwtService.generateToken(user);
+        String refreshToken = jwtService.generateRefreshToken(user);
+
+        revokeAllUserTokens(user);
+        saveUserToken(user, newAccessToken);
         var authResponse = AuthenticationResponseDto.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
