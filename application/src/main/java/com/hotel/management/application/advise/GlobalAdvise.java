@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.awt.image.RescaleOp;
 import java.nio.file.AccessDeniedException;
 
 @ControllerAdvice
@@ -64,21 +65,12 @@ public class GlobalAdvise extends ResponseEntityExceptionHandler {
         return error;
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ResponseBody
-    ValidationErrorResponse onMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         ValidationErrorResponse error = new ValidationErrorResponse();
-        for (FieldError fieldError : e.getBindingResult().getFieldErrors()) {
+        for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
             error.getViolations().add(new Violation(fieldError.getField(), fieldError.getDefaultMessage()));
         }
-        return error;
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
-
-//    @Override
-//    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-//        String message = "Invalid Content Provided. ";
-//        message += ex.getAllErrors().stream().findFirst().get().getDefaultMessage();
-//        return new ResponseEntity<>(new ErrorResponseDto(HttpStatus.BAD_REQUEST.value(), "Bad Request", message), HttpStatus.BAD_REQUEST);
-//    }
 }
