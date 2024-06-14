@@ -1,5 +1,17 @@
 version: "3.7"
 services:
+  mysqldb:
+    image: "mysql:8.0"
+    restart: always
+    ports:
+      - "3306:3306"
+    networks:
+      - springapimysql-net
+    environment:
+      MYSQL_DATABASE: hotelDB
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+      MYSQL_ROOT_PASSWORD: root
   api_service:
     build: .
     restart: always
@@ -14,18 +26,5 @@ services:
 
     volumes:
       - .m2:/root/.m2
-
-  mysqldb:
-    image: "mysql:8.0"
-    restart: always
-    ports:
-      - "3306:3306"
-    networks:
-      - springapimysql-net
-    environment:
-      MYSQL_DATABASE: hotelDB
-      MYSQL_USER: admin
-      MYSQL_PASSWORD: admin
-      MYSQL_ROOT_PASSWORD: root
 networks:
   springapimysql-net:
