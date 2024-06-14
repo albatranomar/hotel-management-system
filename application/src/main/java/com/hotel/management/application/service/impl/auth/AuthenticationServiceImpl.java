@@ -72,11 +72,17 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         final String refreshToken;
         final String userEmail;
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) return;
+        if (authHeader == null || !authHeader.startsWith("Bearer "))
+            throw new BadRequestException("Missing Authorization header.");
 
         refreshToken = authHeader.substring(7);
-        userEmail = jwtService.extractUsername(refreshToken);
-        if (userEmail == null) return;
+        try {
+            userEmail = jwtService.extractUsername(refreshToken);
+        } catch (Exception e) {
+            throw new BadRequestException("Invalid refresh token.");
+        }
+        if (userEmail == null)
+            throw new BadRequestException("Invalid refresh token.");
 
         User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new ResourceNotFoundException("User", "email", userEmail));
         if (!jwtService.isTokenValid(refreshToken, user)) return;
