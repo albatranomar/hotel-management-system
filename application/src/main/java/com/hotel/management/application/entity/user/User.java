@@ -20,7 +20,6 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class User implements UserDetails {
-    @NotNull
     public User(String id, Role role, String firstName, String lastName, String email, String password) {
         this(id, role, firstName, lastName, email, password, new ArrayList<>(), new ArrayList<>());
     }
