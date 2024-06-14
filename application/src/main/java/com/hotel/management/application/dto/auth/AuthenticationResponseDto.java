@@ -1,16 +1,15 @@
 package com.hotel.management.application.dto.auth;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.hateoas.RepresentationModel;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationResponseDto {
+public class AuthenticationResponseDto extends RepresentationModel<AuthenticationResponseDto> {
     @JsonProperty("access_token")
     private String accessToken;
     @JsonProperty("refresh_token")

@@ -7,13 +7,16 @@ import jakarta.validation.constraints.Null;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.sql.Date;
 import java.util.List;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
-public class BookingDto {
+public class BookingDto extends RepresentationModel<BookingDto> {
     private String id;
 
     @NotNull(groups = OnCreate.class)
