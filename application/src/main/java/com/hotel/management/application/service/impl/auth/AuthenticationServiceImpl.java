@@ -37,7 +37,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public AuthenticationResponseDto register(RegisterRequestDto request) {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) throw new BadRequestException("User already registered!");
 
-
         User user = User.builder()
                 .firstName(request.getFirstname())
                 .lastName(request.getLastname())
