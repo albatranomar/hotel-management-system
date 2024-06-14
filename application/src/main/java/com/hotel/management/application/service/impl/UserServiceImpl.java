@@ -64,12 +64,13 @@ public class UserServiceImpl implements UserService {
 
     public static UserDto mapToDto(User user) {
         if (user == null) return null;
-        return new UserDto(user.getId(), user.getRole(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getPassword());
+        return new UserDto(user.getId(), user.getRole(), user.getFirstName(), user.getLastName(), user.getEmail(),
+                user.getPassword(), user.getPhoneNumber());
     }
 
     public static User mapToEntity(UserDto userDto) {
         if (userDto == null) return null;
-
-        return new User(userDto.getId(), userDto.getRole(), userDto.getFirstName(), userDto.getLastName(), userDto.getEmail(), userDto.getPassword());
+        return new User(userDto.getId(), userDto.getRole(), userDto.getFirstName(), userDto.getLastName(),
+                userDto.getEmail(), userDto.getPassword(), userDto.getPhoneNumber());
     }
 }

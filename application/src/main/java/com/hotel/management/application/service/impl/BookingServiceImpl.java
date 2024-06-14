@@ -63,17 +63,22 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public List<RoomDto> getBookingRooms(String bookingId) {
-        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new ResourceNotFoundException("Booking", "id", bookingId));
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new ResourceNotFoundException(
+                "Booking", "id", bookingId));
         return booking.getRooms().stream().map(RoomServiceImpl::mapToDto).toList();
     }
 
     public static BookingDto mapToDto(Booking booking) {
-        return new BookingDto(booking.getId(), UserServiceImpl.mapToDto(booking.getCustomer()),
+        return new BookingDto(booking.getId(), booking.getCheckInDate(), booking.getCheckOutDate(),
+                booking.getNumAdults(), booking.getNumChildren(), booking.getStatus(),
+                UserServiceImpl.mapToDto(booking.getCustomer()),
                 booking.getRooms().stream().map(RoomServiceImpl::mapToDto).toList());
     }
 
     public static Booking mapToEntity(BookingDto bookingDto) {
-        return new Booking(bookingDto.getId(), UserServiceImpl.mapToEntity(bookingDto.getCustomer()), null,
+        return new Booking(bookingDto.getId(), bookingDto.getCheckInDate(), bookingDto.getCheckOutDate(),
+                bookingDto.getNumAdults(), bookingDto.getNumChildren(), bookingDto.getStatus(),
+                UserServiceImpl.mapToEntity(bookingDto.getCustomer()), null,
                 bookingDto.getRooms().stream().map(RoomServiceImpl::mapToEntity).toList());
     }
 }

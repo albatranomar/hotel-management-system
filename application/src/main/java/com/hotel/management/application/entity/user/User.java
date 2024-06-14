@@ -20,8 +20,8 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class User implements UserDetails {
-    public User(String id, Role role, String firstName, String lastName, String email, String password) {
-        this(id, role, firstName, lastName, email, password, new ArrayList<>(), new ArrayList<>());
+    public User(String id, Role role, String firstName, String lastName, String email, String password, String phoneNumber) {
+        this(id, role, firstName, lastName, email, password, phoneNumber, new ArrayList<>(), new ArrayList<>());
     }
 
     @Id
@@ -34,7 +34,7 @@ public class User implements UserDetails {
 
     private String firstName, lastName;
 
-    private String email, password;
+    private String email, password, phoneNumber;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = Booking.class)
     private List<Booking> bookings;

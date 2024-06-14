@@ -40,7 +40,8 @@ public class HouseKeepingServiceImpl implements HouseKeepingService {
     @Override
     public HouseKeepingDto updateHouseKeeping(String id, HouseKeepingDto houseKeepingDto) {
         HouseKeeping houseKeeping =
-                houseKeepingRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("HouseKeeping", "id",
+                houseKeepingRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("HouseKeeping",
+                        "id",
                         id));
 
         try {
@@ -63,8 +64,8 @@ public class HouseKeepingServiceImpl implements HouseKeepingService {
         if (houseKeeping == null) return null;
 
         return new HouseKeepingDto(houseKeeping.getId(), houseKeeping.getTask(), houseKeeping.getStatus(),
-                EmployeeServiceImpl.mapToDto(houseKeeping.getEmployee()),
-                RoomServiceImpl.mapToDto(houseKeeping.getRoom()), houseKeeping.getDate());
+                houseKeeping.getDate(), EmployeeServiceImpl.mapToDto(houseKeeping.getEmployee()),
+                RoomServiceImpl.mapToDto(houseKeeping.getRoom()));
     }
 
     public static HouseKeeping mapToEntity(HouseKeepingDto houseKeepingDto) {
