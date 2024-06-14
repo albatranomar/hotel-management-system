@@ -12,10 +12,10 @@ import static com.hotel.management.application.entity.user.Permission.ADMIN_CREA
 import static com.hotel.management.application.entity.user.Permission.ADMIN_DELETE;
 import static com.hotel.management.application.entity.user.Permission.ADMIN_READ;
 import static com.hotel.management.application.entity.user.Permission.ADMIN_UPDATE;
-import static com.hotel.management.application.entity.user.Permission.MANAGER_CREATE;
-import static com.hotel.management.application.entity.user.Permission.MANAGER_DELETE;
-import static com.hotel.management.application.entity.user.Permission.MANAGER_READ;
-import static com.hotel.management.application.entity.user.Permission.MANAGER_UPDATE;
+import static com.hotel.management.application.entity.user.Permission.CUSTOMER_CREATE;
+import static com.hotel.management.application.entity.user.Permission.CUSTOMER_DELETE;
+import static com.hotel.management.application.entity.user.Permission.CUSTOMER_READ;
+import static com.hotel.management.application.entity.user.Permission.CUSTOMER_UPDATE;
 
 @Getter
 @RequiredArgsConstructor
@@ -26,18 +26,18 @@ public enum Role {
                     ADMIN_UPDATE,
                     ADMIN_DELETE,
                     ADMIN_CREATE,
-                    MANAGER_READ,
-                    MANAGER_UPDATE,
-                    MANAGER_DELETE,
-                    MANAGER_CREATE
+                    CUSTOMER_READ,
+                    CUSTOMER_UPDATE,
+                    CUSTOMER_DELETE,
+                    CUSTOMER_CREATE
             )
     ),
-    MANAGER(
+    CUSTOMER(
             Set.of(
-                    MANAGER_READ,
-                    MANAGER_UPDATE,
-                    MANAGER_DELETE,
-                    MANAGER_CREATE
+                    CUSTOMER_READ,
+                    CUSTOMER_UPDATE,
+                    CUSTOMER_DELETE,
+                    CUSTOMER_CREATE
             )
     );
 
