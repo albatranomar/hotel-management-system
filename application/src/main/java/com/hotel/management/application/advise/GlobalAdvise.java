@@ -26,34 +26,40 @@ import java.nio.file.AccessDeniedException;
 @ControllerAdvice
 public class GlobalAdvise extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ErrorResponseDto> handleResourceNotFoundException(ResourceNotFoundException ex) {
-        return new ResponseEntity<>(new ErrorResponseDto(HttpStatus.NOT_FOUND.value(), "Not Found", ex.getMessage()), HttpStatus.NOT_FOUND);
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseBody
+    public ErrorResponseDto handleResourceNotFoundException(ResourceNotFoundException ex) {
+        return new ErrorResponseDto(HttpStatus.NOT_FOUND.value(), "Not Found", ex.getMessage());
     }
 
     @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<ErrorResponseDto> handleBadRequestException(BadRequestException ex) {
-        return new ResponseEntity<>(new ErrorResponseDto(HttpStatus.BAD_REQUEST.value(), "Bad Request", ex.getMessage()), HttpStatus.BAD_REQUEST);
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseBody
+    public ErrorResponseDto handleBadRequestException(BadRequestException ex) {
+        return new ErrorResponseDto(HttpStatus.BAD_REQUEST.value(), "Bad Request", ex.getMessage());
     }
 
     @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<ErrorResponseDto> handleAuthenticationException(AuthenticationException ex) {
-        return new ResponseEntity<>(new ErrorResponseDto(HttpStatus.FORBIDDEN.value(), "Forbidden", ex.getMessage()), HttpStatus.FORBIDDEN);
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseBody
+    public ErrorResponseDto handleAuthenticationException(AuthenticationException ex) {
+        return new ErrorResponseDto(HttpStatus.FORBIDDEN.value(), "Forbidden", ex.getMessage());
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ErrorResponseDto> handleAccessDeniedException(AccessDeniedException ex) {
-        return new ResponseEntity<>(new ErrorResponseDto(HttpStatus.FORBIDDEN.value(), "Forbidden", ex.getMessage()), HttpStatus.FORBIDDEN);
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseBody
+    public ErrorResponseDto handleAccessDeniedException(AccessDeniedException ex) {
+        return new ErrorResponseDto(HttpStatus.FORBIDDEN.value(), "Forbidden", ex.getMessage());
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    ValidationErrorResponse onConstraintValidationException(
-            ConstraintViolationException e) {
+    ValidationErrorResponse onConstraintValidationException(ConstraintViolationException e) {
         ValidationErrorResponse error = new ValidationErrorResponse();
         for (ConstraintViolation<?> violation : e.getConstraintViolations()) {
-            error.getViolations().add(
-                    new Violation(violation.getPropertyPath().toString(), violation.getMessage()));
+            error.getViolations().add(new Violation(violation.getPropertyPath().toString(), violation.getMessage()));
         }
         return error;
     }
@@ -61,20 +67,18 @@ public class GlobalAdvise extends ResponseEntityExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    ValidationErrorResponse onMethodArgumentNotValidException(
-            MethodArgumentNotValidException e) {
+    ValidationErrorResponse onMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         ValidationErrorResponse error = new ValidationErrorResponse();
         for (FieldError fieldError : e.getBindingResult().getFieldErrors()) {
-            error.getViolations().add(
-                    new Violation(fieldError.getField(), fieldError.getDefaultMessage()));
+            error.getViolations().add(new Violation(fieldError.getField(), fieldError.getDefaultMessage()));
         }
         return error;
     }
 
-    @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-        String message = "Invalid Content Provided. ";
-        message += ex.getAllErrors().stream().findFirst().get().getDefaultMessage();
-        return new ResponseEntity<>(new ErrorResponseDto(HttpStatus.BAD_REQUEST.value(), "Bad Request", message), HttpStatus.BAD_REQUEST);
-    }
+//    @Override
+//    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+//        String message = "Invalid Content Provided. ";
+//        message += ex.getAllErrors().stream().findFirst().get().getDefaultMessage();
+//        return new ResponseEntity<>(new ErrorResponseDto(HttpStatus.BAD_REQUEST.value(), "Bad Request", message), HttpStatus.BAD_REQUEST);
+//    }
 }
