@@ -1,5 +1,6 @@
 package com.hotel.management.application.entity;
 
+import com.hotel.management.application.entity.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

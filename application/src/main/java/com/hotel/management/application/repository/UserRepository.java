@@ -1,7 +1,7 @@
 package com.hotel.management.application.repository;
 
 import com.hotel.management.application.entity.Booking;
-import com.hotel.management.application.entity.User;
+import com.hotel.management.application.entity.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

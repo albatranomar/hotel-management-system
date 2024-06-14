@@ -2,7 +2,7 @@ package com.hotel.management.application.service.impl;
 
 import com.hotel.management.application.dto.UserDto;
 import com.hotel.management.application.entity.Booking;
-import com.hotel.management.application.entity.User;
+import com.hotel.management.application.entity.user.User;
 import com.hotel.management.application.exception.BadRequestException;
 import com.hotel.management.application.exception.ResourceNotFoundException;
 import com.hotel.management.application.repository.UserRepository;
