@@ -1,7 +1,6 @@
-package com.hotel.management.application.service.impl;
+package com.hotel.management.application.service.impl.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hotel.management.application.config.JwtService;
 import com.hotel.management.application.dto.auth.AuthenticationRequestDto;
 import com.hotel.management.application.dto.auth.AuthenticationResponseDto;
 import com.hotel.management.application.dto.auth.RegisterRequestDto;
@@ -11,7 +10,8 @@ import com.hotel.management.application.exception.BadRequestException;
 import com.hotel.management.application.exception.ResourceNotFoundException;
 import com.hotel.management.application.repository.TokenRepository;
 import com.hotel.management.application.repository.UserRepository;
-import com.hotel.management.application.service.AuthenticationService;
+import com.hotel.management.application.service.auth.AuthenticationService;
+import com.hotel.management.application.service.auth.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -88,6 +88,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
+
         new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
     }
 

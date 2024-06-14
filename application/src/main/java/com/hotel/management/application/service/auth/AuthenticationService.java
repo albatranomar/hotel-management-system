@@ -1,4 +1,4 @@
-package com.hotel.management.application.service;
+package com.hotel.management.application.service.auth;
 
 import com.hotel.management.application.dto.auth.AuthenticationRequestDto;
 import com.hotel.management.application.dto.auth.AuthenticationResponseDto;
