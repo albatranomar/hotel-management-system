@@ -3,6 +3,7 @@ package com.hotel.management.application.service.impl;
 import com.hotel.management.application.dto.BookingDto;
 import com.hotel.management.application.dto.RoomDto;
 import com.hotel.management.application.entity.Booking;
+import com.hotel.management.application.entity.Payment;
 import com.hotel.management.application.exception.BadRequestException;
 import com.hotel.management.application.exception.ResourceNotFoundException;
 import com.hotel.management.application.repository.BookingRepository;
@@ -72,6 +73,21 @@ public class BookingServiceImpl implements BookingService {
     public void cancelBooking(String bookingId) {
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new ResourceNotFoundException("Booking", "id", bookingId));
         booking.setStatus(Booking.Status.PENDING_CANCELLATION);
+        bookingRepository.save(booking);
+    }
+
+    @Override
+    public void checkout(String id) {
+        Booking booking = bookingRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Booking", "id", id));
+        booking.setStatus(Booking.Status.CHECKED_OUT);
+        booking.getPayment().setPayment_status(Payment.Status.PAID);
+        bookingRepository.save(booking);
+    }
+
+    @Override
+    public void checkin(String id) {
+        Booking booking = bookingRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Booking", "id", id));
+        booking.setStatus(Booking.Status.CHECKED_IN);
         bookingRepository.save(booking);
     }
 

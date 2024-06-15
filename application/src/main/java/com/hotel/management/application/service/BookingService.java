@@ -14,4 +14,6 @@ public interface BookingService {
     boolean bookingExistsWithId(String id);
     List<RoomDto> getBookingRooms(String bookingId);
     void cancelBooking(String bookingId);
+    void checkout(String id);
+    void checkin(String id);
 }
