@@ -7,6 +7,7 @@ import com.hotel.management.application.entity.Payment;
 import com.hotel.management.application.exception.BadRequestException;
 import com.hotel.management.application.exception.ResourceNotFoundException;
 import com.hotel.management.application.repository.BookingRepository;
+import com.hotel.management.application.repository.PaymentRepository;
 import com.hotel.management.application.service.BookingService;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +16,11 @@ import java.util.List;
 @Service
 public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
+    private final PaymentRepository paymentRepository;
 
-    public BookingServiceImpl(BookingRepository bookingRepository) {
+    public BookingServiceImpl(BookingRepository bookingRepository, PaymentRepository paymentRepository) {
         this.bookingRepository = bookingRepository;
+        this.paymentRepository = paymentRepository;
     }
 
     @Override
@@ -88,6 +91,7 @@ public class BookingServiceImpl implements BookingService {
     public void checkin(String id) {
         Booking booking = bookingRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Booking", "id", id));
         booking.setStatus(Booking.Status.CHECKED_IN);
+        booking.setPayment(paymentRepository.save(new Payment()));
         bookingRepository.save(booking);
     }
 
