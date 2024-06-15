@@ -12,4 +12,6 @@ import java.util.List;
 public interface EmployeeRepository extends JpaRepository<Employee, String> {
     @Query("SELECT hk FROM HouseKeeping hk WHERE hk.employee = ?1")
     List<HouseKeeping> findHouseKeepingByEmployeeId(String id);
+
+    boolean existsByEmail(String email);
 }

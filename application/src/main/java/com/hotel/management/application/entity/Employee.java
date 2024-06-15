@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 public class Employee {
-    public Employee(String id, String fname, String lname, String phoneNo, String email, int salary) {
+    public Employee(String id, String fname, String lname, String phoneNo, String email, Double salary) {
         this(id, fname, lname, phoneNo, email, salary, new ArrayList<>());
     }
 
@@ -24,7 +24,7 @@ public class Employee {
 
     private String fname, lname, phoneNo, email;
 
-    private int salary;
+    private Double salary;
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = HouseKeeping.class)
     private List<HouseKeeping> tasks;

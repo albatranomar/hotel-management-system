@@ -23,6 +23,6 @@ public class EmployeeDto extends RepresentationModel<EmployeeDto> {
     private String fname, lname, phoneNo, email;
 
     @NotNull(groups = OnCreate.class)
-    @PositiveOrZero(message = "Salary should be equaled to or greater than zero.")
-    private int salary;
+    @PositiveOrZero(groups = {OnCreate.class},message = "Salary should be equaled to or greater than zero.")
+    private Double salary;
 }

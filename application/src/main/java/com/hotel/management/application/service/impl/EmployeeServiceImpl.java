@@ -64,6 +64,16 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeRepository.findHouseKeepingByEmployeeId(id);
     }
 
+    @Override
+    public boolean existsWithId(String id) {
+        return employeeRepository.existsById(id);
+    }
+
+    @Override
+    public boolean existsWithEmail(String email) {
+        return employeeRepository.existsByEmail(email);
+    }
+
     public static EmployeeDto mapToDto(Employee employee) {
         if (employee == null) return null;
         return new EmployeeDto(employee.getId(), employee.getFname(), employee.getLname(), employee.getPhoneNo(),

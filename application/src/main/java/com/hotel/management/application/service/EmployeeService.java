@@ -17,4 +17,8 @@ public interface EmployeeService {
     void deleteEmployee(String id);
 
     List<HouseKeeping> getEmployeeTasks(String id);
+
+    boolean existsWithId(String id);
+
+    boolean existsWithEmail(String email);
 }
