@@ -55,9 +55,8 @@ public class UserServiceImpl implements UserService {
         try {
             user.setFirstName(userDto.getFirstName());
             user.setLastName(userDto.getLastName());
-            user.setRole(userDto.getRole());
             user.setEmail(userDto.getEmail());
-            user.setPassword(userDto.getPassword());
+            user.setPhoneNumber(userDto.getPhoneNumber());
         } catch (IllegalArgumentException ex) {
             throw new BadRequestException("Invalid value provided.");
         }
