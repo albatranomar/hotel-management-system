@@ -1,5 +1,6 @@
 package com.hotel.management.application.service;
 
+import com.hotel.management.application.dto.HouseKeepingDto;
 import com.hotel.management.application.dto.RoomDto;
 
 import java.util.List;
@@ -11,4 +12,5 @@ public interface RoomService {
     void deleteRoomById(String id);
     RoomDto createRoom(RoomDto roomDto);
     boolean roomExistsWithId(String id);
+    List<HouseKeepingDto> getRoomTaks(String id);
 }
