@@ -42,7 +42,11 @@ public class BookingServiceImpl implements BookingService {
                 , "id", id));
 
         try {
-            booking.setCustomer(UserServiceImpl.mapToEntity(bookingDto.getCustomer()));
+            booking.setStatus(bookingDto.getStatus());
+            booking.setCheckInDate(bookingDto.getCheckInDate());
+            booking.setCheckOutDate(bookingDto.getCheckOutDate());
+            booking.setNumAdults(bookingDto.getNumAdults());
+            booking.setNumChildren(bookingDto.getNumChildren());
         } catch (IllegalArgumentException ex) {
             throw new BadRequestException("Invalid value provided.");
         }
