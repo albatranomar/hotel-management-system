@@ -60,6 +60,11 @@ public class HouseKeepingServiceImpl implements HouseKeepingService {
         houseKeepingRepository.deleteById(id);
     }
 
+    @Override
+    public boolean taskExistsWithId(String id) {
+        return houseKeepingRepository.existsById(id);
+    }
+
     public static HouseKeepingDto mapToDto(HouseKeeping houseKeeping) {
         if (houseKeeping == null) return null;
 

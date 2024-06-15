@@ -14,4 +14,6 @@ public interface HouseKeepingService {
     HouseKeepingDto updateHouseKeeping(String id, HouseKeepingDto houseKeepingDto);
 
     void deleteHouseKeepingById(String id);
+
+    boolean taskExistsWithId(String id);
 }
