@@ -19,7 +19,7 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public RoomDto getRoomById(String id) {
-        Room room = roomRepository.findById(id).orElse(null);
+        Room room = roomRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Room", "id", id));
 
         return mapToDto(room);
     }
