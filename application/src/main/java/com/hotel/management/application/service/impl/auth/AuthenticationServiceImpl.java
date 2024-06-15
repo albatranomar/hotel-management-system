@@ -71,30 +71,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        String refreshToken;
-        String userEmail;
-        if (authHeader == null || !authHeader.startsWith("Bearer "))
-            throw new BadRequestException("Missing Authorization header.");
-
-        refreshToken = authHeader.substring(7);
-        try {
-            userEmail = jwtService.extractUsername(refreshToken);
-        } catch (Exception e) {
-            throw new BadRequestException("Invalid refresh token.");
-        }
-        if (userEmail == null)
-            throw new BadRequestException("Invalid refresh token.");
-
-        User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new ResourceNotFoundException("User", "email", userEmail));
-        if (!jwtService.isTokenValid(refreshToken, user)) return;
+        User user = getUser(request);
 
         String accessToken = jwtService.generateToken(user);
+        String newRefreshToken = jwtService.generateRefreshToken(user);
         revokeAllUserTokens(user);
         saveUserToken(user, accessToken);
         var authResponse = AuthenticationResponseDto.builder()
                 .accessToken(accessToken)
-                .refreshToken(refreshToken)
+                .refreshToken(newRefreshToken)
                 .build();
 
         new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
@@ -102,6 +87,38 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public void changePassword(HttpServletRequest request, HttpServletResponse response, ChangePasswordDto changePasswordDto) throws IOException {
+        User user = getUser(request);
+
+        if (!passwordEncoder.matches(changePasswordDto.getOldPassword(), user.getPassword()))
+            throw new BadRequestException("Wrong password.");
+
+        if (!changePasswordDto.getNewPassword().equals(changePasswordDto.getConfirmPassword()))
+            throw new BadRequestException("Password and confirmation password don't match.");
+
+        user.setPassword(passwordEncoder.encode(changePasswordDto.getNewPassword()));
+
+        String newAccessToken = jwtService.generateToken(user);
+        String refreshToken = jwtService.generateRefreshToken(user);
+
+        revokeAllUserTokens(user);
+        saveUserToken(user, newAccessToken);
+        var authResponse = AuthenticationResponseDto.builder()
+                .accessToken(newAccessToken)
+                .refreshToken(refreshToken)
+                .build();
+
+        new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
+    }
+
+    @Override
+    public void logout(HttpServletRequest request) {
+        User user = getUser(request);
+
+        revokeAllUserTokens(user);
+    }
+
+    @Override
+    public User getUser(HttpServletRequest request) {
         String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         String accessToken;
         String userEmail;
@@ -118,27 +135,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             throw new AccessDeniedException("Invalid access token.");
 
         User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new ResourceNotFoundException("User", "email", userEmail));
-        if (!jwtService.isTokenValid(accessToken, user)) return;
+        if (!jwtService.isTokenValid(accessToken, user)) return null;
 
-        if (!passwordEncoder.matches(changePasswordDto.getOldPassword(), user.getPassword()))
-            throw new BadRequestException("Wrong password.");
-
-        if (!changePasswordDto.getNewPassword().equals(changePasswordDto.getConfirmPassword()))
-            throw new BadRequestException("Password and confirmation password don't match.");
-
-        user.setPassword(passwordEncoder.encode(changePasswordDto.getNewPassword()));
-
-        String newAccessToken = jwtService.generateToken(user);
-        String refreshToken = jwtService.generateRefreshToken(user);
-
-        revokeAllUserTokens(user);
-        saveUserToken(user, newAccessToken);
-        var authResponse = AuthenticationResponseDto.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .build();
-
-        new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
+        return user;
     }
 
     private void saveUserToken(User user, String jwtToken) {
