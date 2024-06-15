@@ -1,7 +1,7 @@
 package com.hotel.management.application.entity;
 
-import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import jakarta.persistence.*;
@@ -14,8 +14,8 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 public class Employee {
-    public Employee(String id, String fname, String lname, String phoneNo, String email, Date dateOfBirth, int salary) {
-        this(id, fname, lname, phoneNo, email, dateOfBirth, salary, new ArrayList<>());
+    public Employee(String id, String fname, String lname, String phoneNo, String email, int salary) {
+        this(id, fname, lname, phoneNo, email, salary, new ArrayList<>());
     }
 
     @Id
@@ -23,8 +23,6 @@ public class Employee {
     private String id;
 
     private String fname, lname, phoneNo, email;
-
-    private Date dateOfBirth;
 
     private int salary;
 

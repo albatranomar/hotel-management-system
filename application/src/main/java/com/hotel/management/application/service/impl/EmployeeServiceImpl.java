@@ -47,7 +47,6 @@ public class EmployeeServiceImpl implements EmployeeService {
             employee.setEmail(employeeDto.getEmail());
             employee.setPhoneNo(employeeDto.getPhoneNo());
             employee.setSalary(employeeDto.getSalary());
-            employee.setDateOfBirth(employeeDto.getDateOfBirth());
         } catch (IllegalArgumentException ex) {
             throw new BadRequestException("Invalid value provided.");
         }
@@ -68,13 +67,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     public static EmployeeDto mapToDto(Employee employee) {
         if (employee == null) return null;
         return new EmployeeDto(employee.getId(), employee.getFname(), employee.getLname(), employee.getPhoneNo(),
-                employee.getEmail(), employee.getDateOfBirth(), employee.getSalary());
+                employee.getEmail(), employee.getSalary());
     }
 
     public static Employee mapToEntity(EmployeeDto employeeDto) {
         if (employeeDto == null) return null;
         return new Employee(employeeDto.getId(), employeeDto.getFname(), employeeDto.getLname(),
-                employeeDto.getPhoneNo(), employeeDto.getEmail(), employeeDto.getDateOfBirth(),
+                employeeDto.getPhoneNo(), employeeDto.getEmail(),
                 employeeDto.getSalary());
     }
 }

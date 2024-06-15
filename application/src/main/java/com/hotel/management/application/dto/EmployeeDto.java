@@ -1,5 +1,6 @@
 package com.hotel.management.application.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.hotel.management.application.dto.validation.OnCreate;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -10,7 +11,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.hateoas.RepresentationModel;
 
-import java.sql.Date;
+import java.util.Date;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -22,8 +23,6 @@ public class EmployeeDto extends RepresentationModel<EmployeeDto> {
     private String fname, lname, phoneNo, email;
 
     @NotNull(groups = OnCreate.class)
-    private Date dateOfBirth;
-
     @PositiveOrZero(message = "Salary should be equaled to or greater than zero.")
     private int salary;
 }
