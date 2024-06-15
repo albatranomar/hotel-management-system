@@ -47,7 +47,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public void deleteProviderById(String id) {
+    public void deleteBookingById(String id) {
         bookingRepository.deleteById(id);
     }
 
@@ -66,6 +66,13 @@ public class BookingServiceImpl implements BookingService {
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new ResourceNotFoundException(
                 "Booking", "id", bookingId));
         return booking.getRooms().stream().map(RoomServiceImpl::mapToDto).toList();
+    }
+
+    @Override
+    public void cancelBooking(String bookingId) {
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new ResourceNotFoundException("Booking", "id", bookingId));
+        booking.setStatus(Booking.Status.PENDING_CANCELLATION);
+        bookingRepository.save(booking);
     }
 
     public static BookingDto mapToDto(Booking booking) {

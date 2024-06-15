@@ -9,8 +9,9 @@ public interface BookingService {
     List<BookingDto> getAllBookings();
     BookingDto getBookingById(String id);
     BookingDto updateBookingById(String id, BookingDto bookingDto);
-    void deleteProviderById(String id);
+    void deleteBookingById(String id);
     BookingDto createBooking(BookingDto bookingDto);
     boolean bookingExistsWithId(String id);
     List<RoomDto> getBookingRooms(String bookingId);
+    void cancelBooking(String bookingId);
 }
