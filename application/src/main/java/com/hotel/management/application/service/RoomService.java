@@ -12,5 +12,5 @@ public interface RoomService {
     void deleteRoomById(String id);
     RoomDto createRoom(RoomDto roomDto);
     boolean roomExistsWithId(String id);
-    List<HouseKeepingDto> getRoomTaks(String id);
+    List<HouseKeepingDto> getRoomTask(String id);
 }

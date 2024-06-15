@@ -5,7 +5,6 @@ import com.hotel.management.application.dto.RoomDto;
 import com.hotel.management.application.entity.Room;
 import com.hotel.management.application.exception.ResourceNotFoundException;
 import com.hotel.management.application.repository.RoomRepository;
-import com.hotel.management.application.service.HouseKeepingService;
 import com.hotel.management.application.service.RoomService;
 import org.springframework.stereotype.Service;
 
@@ -61,7 +60,7 @@ public class RoomServiceImpl implements RoomService {
     }
 
     @Override
-    public List<HouseKeepingDto> getRoomTaks(String id) {
+    public List<HouseKeepingDto> getRoomTask(String id) {
         Room room = roomRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Room", "id", id));
         return room.getTasks().stream().map(HouseKeepingServiceImpl::mapToDto).toList();
     }
