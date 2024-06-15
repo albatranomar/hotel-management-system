@@ -1,8 +1,7 @@
 package com.hotel.management.application.dto;
 
 import com.hotel.management.application.dto.validation.OnCreate;
-import com.hotel.management.application.entity.Booking;
-import com.hotel.management.application.entity.HouseKeeping;
+import com.hotel.management.application.entity.Room;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
@@ -25,7 +24,7 @@ public class RoomDto extends RepresentationModel<RoomDto> {
     private String type;
 
     @NotBlank(groups = OnCreate.class)
-    private String status;
+    private Room.Status status;
 
     @PositiveOrZero
     private Integer capacity;

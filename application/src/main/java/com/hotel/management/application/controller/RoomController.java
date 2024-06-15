@@ -1,6 +1,5 @@
 package com.hotel.management.application.controller;
 
-import com.hotel.management.application.dto.BookingDto;
 import com.hotel.management.application.dto.HouseKeepingDto;
 import com.hotel.management.application.dto.RoomDto;
 import com.hotel.management.application.dto.validation.OnCreate;
@@ -14,7 +13,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -39,7 +37,7 @@ public class RoomController {
                     if (key_value.length == 2) {
                         String key = key_value[0].toLowerCase();
                         if (key.equals("status"))
-                            rooms.set(rooms.get().stream().filter(roomDto -> roomDto.getStatus().toLowerCase().contains(key_value[1].toLowerCase())).toList());
+                            rooms.set(rooms.get().stream().filter(roomDto -> roomDto.getStatus().name().toLowerCase().contains(key_value[1].toLowerCase())).toList());
                     }
                 });
                 case "limit" -> {
@@ -97,7 +95,7 @@ public class RoomController {
     @GetMapping("/{id}/task")
     public ResponseEntity<List<HouseKeepingDto>> getRoomTasks(@PathVariable("id") String id) {
         // TODO: Add links
-        return ResponseEntity.ok().body(roomService.getRoomTaks(id));
+        return ResponseEntity.ok().body(roomService.getRoomTask(id));
     }
 
     private static void addLinkToDto(RoomDto roomDto) {

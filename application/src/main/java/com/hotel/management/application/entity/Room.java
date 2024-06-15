@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class Room {
-    public Room(String id, Integer no, String type, String status, Integer capacity, Double cost, List<Feature> list, List<Facility> list1) {
+    public Room(String id, Integer no, String type, Status status, Integer capacity, Double cost, List<Feature> list, List<Facility> list1) {
         this(id, no, type, status, capacity, cost, list, list1, new ArrayList<>(), new ArrayList<>());
     }
 
@@ -23,7 +23,7 @@ public class Room {
     private String id;
     private Integer no;
     private String type;
-    private String status;
+    private Status status;
     private Integer capacity;
 
     private Double cost;
@@ -45,4 +45,9 @@ public class Room {
             joinColumns = @JoinColumn(name = "room_id"),
             inverseJoinColumns = @JoinColumn(name = "booking_id"))
     private List<Booking> bookings;
+
+    public static enum Status {
+        AVAILABLE,
+        RESERVED
+    }
 }
