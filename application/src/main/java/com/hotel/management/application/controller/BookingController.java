@@ -108,6 +108,19 @@ public class BookingController {
         return ResponseEntity.ok().body(bookingService.getBookingRooms(id));
     }
 
+    @PostMapping("/{id}/checkin")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<String> checkin(@PathVariable String id) {
+        bookingService.checkin(id);
+        return ResponseEntity.ok().body("Checked in successfully.");
+    }
+
+    @PostMapping("/{id}/checkout")
+    public ResponseEntity<String> checkout(@PathVariable String id) {
+        bookingService.checkout(id);
+        return ResponseEntity.ok().body("Checked out successfully.");
+    }
+
     private static void addLinkToDto(BookingDto bookingDto) {
         bookingDto.add(linkTo(methodOn(BookingController.class).getBookingById(bookingDto.getId())).withSelfRel());
         bookingDto.add(linkTo(methodOn(BookingController.class).getBookingRooms(bookingDto.getId())).withRel("rooms"));
