@@ -2,6 +2,7 @@ package com.hotel.management.application.service.impl;
 
 import com.hotel.management.application.dto.UserDto;
 import com.hotel.management.application.entity.Booking;
+import com.hotel.management.application.entity.user.Role;
 import com.hotel.management.application.entity.user.User;
 import com.hotel.management.application.exception.BadRequestException;
 import com.hotel.management.application.exception.ResourceNotFoundException;
@@ -28,6 +29,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> getAllUsers() {
         List<User> users = userRepository.findAll();
+        return users.stream().map(UserServiceImpl::mapToDto).toList();
+    }
+
+    @Override
+    public List<UserDto> getAllCustomers() {
+        List<User> users = userRepository.findByRole(Role.CUSTOMER);
+        return users.stream().map(UserServiceImpl::mapToDto).toList();
+    }
+
+    @Override
+    public List<UserDto> getAllAdmins() {
+        List<User> users = userRepository.findByRole(Role.ADMIN);
         return users.stream().map(UserServiceImpl::mapToDto).toList();
     }
 

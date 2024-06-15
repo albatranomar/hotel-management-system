@@ -11,6 +11,10 @@ public interface UserService {
 
     List<UserDto> getAllUsers();
 
+    List<UserDto> getAllCustomers();
+
+    List<UserDto> getAllAdmins();
+
     UserDto addUser(UserDto userDto);
 
     UserDto updateUser(String id, UserDto userDto);
