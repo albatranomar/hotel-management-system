@@ -13,8 +13,13 @@ public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-    private String payment_status;
+    private Status payment_status;
 
     @OneToOne(mappedBy = "payment")
     private Booking booking;
+
+    public static enum Status {
+        PAID,
+        PENDING
+    }
 }

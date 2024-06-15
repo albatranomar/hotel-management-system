@@ -1,5 +1,6 @@
 package com.hotel.management.application.dto;
 
+import com.hotel.management.application.entity.Payment;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,7 +14,7 @@ public class PaymentDto extends RepresentationModel<PaymentDto> {
     private String id;
 
     @NotBlank
-    private String paymentStatus;
+    private Payment.Status paymentStatus;
 
     private BookingDto booking;
 }
