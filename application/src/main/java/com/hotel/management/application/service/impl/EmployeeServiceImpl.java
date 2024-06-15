@@ -1,6 +1,7 @@
 package com.hotel.management.application.service.impl;
 
 import com.hotel.management.application.dto.EmployeeDto;
+import com.hotel.management.application.dto.HouseKeepingDto;
 import com.hotel.management.application.entity.Employee;
 import com.hotel.management.application.entity.HouseKeeping;
 import com.hotel.management.application.exception.BadRequestException;
@@ -60,8 +61,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<HouseKeeping> getEmployeeTasks(String id) {
-        return employeeRepository.findHouseKeepingByEmployeeId(id);
+    public List<HouseKeepingDto> getEmployeeTasks(String id) {
+        return employeeRepository.findHouseKeepingByEmployeeId(id).stream().map(HouseKeepingServiceImpl::mapToDto).toList();
     }
 
     @Override

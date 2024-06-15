@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, String> {
-    @Query("SELECT hk FROM HouseKeeping hk WHERE hk.employee = ?1")
+    @Query("SELECT hk FROM HouseKeeping hk WHERE hk.employee.id = ?1")
     List<HouseKeeping> findHouseKeepingByEmployeeId(String id);
 
     boolean existsByEmail(String email);
