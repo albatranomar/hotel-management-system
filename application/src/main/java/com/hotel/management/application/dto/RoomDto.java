@@ -23,7 +23,6 @@ public class RoomDto extends RepresentationModel<RoomDto> {
     @NotBlank(groups = OnCreate.class)
     private String type;
 
-    @NotBlank(groups = OnCreate.class)
     private Room.Status status;
 
     @PositiveOrZero
