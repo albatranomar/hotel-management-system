@@ -1,6 +1,7 @@
 package com.hotel.management.application.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,9 +24,12 @@ public class Room {
     private String id;
     private Integer no;
     private String type;
-    private Status status;
-    private Integer capacity;
 
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private Status status = Status.AVAILABLE;
+
+    private Integer capacity;
     private Double cost;
 
     @ToString.Exclude

@@ -177,7 +177,7 @@ public class SearchController {
                                     room.getType().toLowerCase().contains(key_value[1].toLowerCase())).toList()
                             );
                             case "status" -> rooms.set(rooms.get().stream().filter(room ->
-                                    room.getStatus().toLowerCase().contains(key_value[1].toLowerCase())).toList()
+                                    room.getStatus().name().toLowerCase().contains(key_value[1].toLowerCase())).toList()
                             );
                             case "capacity" -> rooms.set(rooms.get().stream().filter(room ->
                                     room.getCapacity().toString().contains(key_value[1])).toList()
