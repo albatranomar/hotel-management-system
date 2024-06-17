@@ -74,6 +74,11 @@ public class UserServiceImpl implements UserService {
         return userRepository.getBookings(id);
     }
 
+    @Override
+    public boolean hasBooking(String userId, String bookingId) {
+        return userRepository.getBookings(userId).stream().anyMatch(b -> b.getId().equals(bookingId));
+    }
+
     public static UserDto mapToDto(User user) {
         if (user == null) return null;
         return new UserDto(user.getId(), user.getRole(), user.getFirstName(), user.getLastName(), user.getEmail(),

@@ -1,6 +1,5 @@
 package com.hotel.management.application.service;
 
-import com.hotel.management.application.dto.BookingDto;
 import com.hotel.management.application.dto.UserDto;
 import com.hotel.management.application.entity.Booking;
 
@@ -22,4 +21,6 @@ public interface UserService {
     void deleteUser(String id);
 
     List<Booking> getUserBookings(String id);
+
+    boolean hasBooking(String userId, String bookingId);
 }
