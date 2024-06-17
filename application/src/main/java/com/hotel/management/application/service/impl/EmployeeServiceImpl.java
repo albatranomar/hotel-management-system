@@ -7,18 +7,18 @@ import com.hotel.management.application.entity.HouseKeeping;
 import com.hotel.management.application.exception.BadRequestException;
 import com.hotel.management.application.exception.ResourceNotFoundException;
 import com.hotel.management.application.repository.EmployeeRepository;
+import com.hotel.management.application.repository.HouseKeepingRepository;
 import com.hotel.management.application.service.EmployeeService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
-
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository) {
-        this.employeeRepository = employeeRepository;
-    }
+    private final HouseKeepingRepository houseKeepingRepository;
 
     @Override
     public EmployeeDto getEmployeeById(String id) {
@@ -73,6 +73,28 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public boolean existsWithEmail(String email) {
         return employeeRepository.existsByEmail(email);
+    }
+
+    @Override
+    public void addTask(String empId, String taskId) {
+        Employee employee = employeeRepository.findById(empId).orElseThrow(() -> new ResourceNotFoundException("Employee", "id", empId));
+        HouseKeeping task = houseKeepingRepository.findById(taskId).orElseThrow(() -> new ResourceNotFoundException("HouseKeeping", "id", taskId));
+        if (employee.getTasks().contains(task))
+            throw new BadRequestException("Employee already has this task.");
+
+        employee.getTasks().add(task);
+        employeeRepository.save(employee);
+    }
+
+    @Override
+    public void removeTask(String empId, String taskId) {
+        Employee employee = employeeRepository.findById(empId).orElseThrow(() -> new ResourceNotFoundException("Employee", "id", empId));
+        HouseKeeping task = houseKeepingRepository.findById(taskId).orElseThrow(() -> new ResourceNotFoundException("HouseKeeping", "id", taskId));
+        if (employee.getTasks().contains(task))
+            throw new BadRequestException("Employee does not have this task!");
+
+        employee.getTasks().remove(task);
+        employeeRepository.save(employee);
     }
 
     public static EmployeeDto mapToDto(Employee employee) {

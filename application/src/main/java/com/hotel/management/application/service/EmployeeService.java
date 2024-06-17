@@ -2,7 +2,6 @@ package com.hotel.management.application.service;
 
 import com.hotel.management.application.dto.EmployeeDto;
 import com.hotel.management.application.dto.HouseKeepingDto;
-import com.hotel.management.application.entity.HouseKeeping;
 
 import java.util.List;
 
@@ -22,4 +21,8 @@ public interface EmployeeService {
     boolean existsWithId(String id);
 
     boolean existsWithEmail(String email);
+
+    void addTask(String empId, String taskId);
+
+    void removeTask(String empId, String taskId);
 }
