@@ -5,7 +5,6 @@ import com.hotel.management.application.dto.validation.ValidationErrorResponse;
 import com.hotel.management.application.dto.validation.Violation;
 import com.hotel.management.application.exception.BadRequestException;
 import com.hotel.management.application.exception.ResourceNotFoundException;
-import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -55,12 +54,8 @@ public class GlobalAdvise extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
-    ValidationErrorResponse onConstraintValidationException(ConstraintViolationException e) {
-        ValidationErrorResponse error = new ValidationErrorResponse();
-        for (ConstraintViolation<?> violation : e.getConstraintViolations()) {
-            error.getViolations().add(new Violation(violation.getPropertyPath().toString(), violation.getMessage()));
-        }
-        return error;
+    ErrorResponseDto onConstraintValidationException(ConstraintViolationException e) {
+        return new ErrorResponseDto(HttpStatus.BAD_REQUEST.value(), "Bad Request", e.getMessage());
     }
 
     @Override
