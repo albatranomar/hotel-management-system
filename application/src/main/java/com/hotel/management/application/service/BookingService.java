@@ -1,6 +1,7 @@
 package com.hotel.management.application.service;
 
 import com.hotel.management.application.dto.BookingDto;
+import com.hotel.management.application.dto.PaymentDto;
 import com.hotel.management.application.dto.RoomDto;
 
 import java.util.List;
@@ -13,6 +14,7 @@ public interface BookingService {
     BookingDto createBooking(BookingDto bookingDto);
     boolean bookingExistsWithId(String id);
     List<RoomDto> getBookingRooms(String bookingId);
+    PaymentDto getPaymentFor(String id);
     void cancelBooking(String bookingId);
     void checkout(String id);
     void checkin(String id);
