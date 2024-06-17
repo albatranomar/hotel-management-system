@@ -100,10 +100,40 @@ public class RoomController {
         return ResponseEntity.ok().body(tasks);
     }
 
+    @PostMapping("/{roomId}/features/{featureId}")
+    public ResponseEntity<String> addFeatureToRoom(@PathVariable("roomId") String roomId, @PathVariable("featureId") String featureId) {
+        roomService.addFeatureToRoom(roomId, featureId);
+        return ResponseEntity.ok().body("Feature added to room.");
+    }
+
+    @DeleteMapping("/{roomId}/features/{featureId}")
+    public ResponseEntity<String> removeFeatureFromRoom(@PathVariable("roomId") String roomId, @PathVariable("featureId") String featureId) {
+        roomService.removeFeatureFromRoom(roomId, featureId);
+        return ResponseEntity.ok().body("Feature removed from room.");
+    }
+
+    @PostMapping("/{roomId}/facilities/{facilityId}")
+    public ResponseEntity<String> addFacilityToRoom(@PathVariable("roomId") String roomId, @PathVariable("facilityId") String facilityId) {
+        roomService.addFacilityToRoom(roomId, facilityId);
+        return ResponseEntity.ok().body("Facility added to room.");
+    }
+
+    @DeleteMapping("/{roomId}/facilities/{facilityId}")
+    public ResponseEntity<String> removeFacilityFromRoom(@PathVariable("roomId") String roomId, @PathVariable("facilityId") String facilityId) {
+        roomService.removeFacilityFromRoom(roomId, facilityId);
+        return ResponseEntity.ok().body("Facility removed from room.");
+    }
+
     public static void addLinkToDto(RoomDto roomDto) {
         roomDto.add(linkTo(methodOn(RoomController.class).getRoomById(roomDto.getId())).withSelfRel());
         roomDto.add(linkTo(methodOn(RoomController.class).getRoomTasks(roomDto.getId())).withRel("tasks"));
         roomDto.add(linkTo(methodOn(RoomController.class).updateRoom(roomDto.getId(), null)).withRel("update"));
         roomDto.add(linkTo(methodOn(RoomController.class).deleteRoom(roomDto.getId())).withRel("delete"));
+        roomDto.add(linkTo(methodOn(RoomController.class).addFeatureToRoom(roomDto.getId(), null)).withRel("add-feature"));
+        roomDto.add(linkTo(methodOn(RoomController.class).removeFeatureFromRoom(roomDto.getId(), null)).withRel("remove-feature"));
+        roomDto.add(linkTo(methodOn(RoomController.class).addFacilityToRoom(roomDto.getId(), null)).withRel("add-facility"));
+        roomDto.add(linkTo(methodOn(RoomController.class).removeFacilityFromRoom(roomDto.getId(), null)).withRel("remove-facility"));
+        roomDto.getFeatures().forEach(FeatureController::addLinkToDto);
+        roomDto.getFacilities().forEach(FacilityController::addLinkToDto);
     }
 }
