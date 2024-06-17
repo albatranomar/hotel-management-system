@@ -94,8 +94,10 @@ public class RoomController {
 
     @GetMapping("/{id}/task")
     public ResponseEntity<List<HouseKeepingDto>> getRoomTasks(@PathVariable("id") String id) {
-        // TODO: Add links
-        return ResponseEntity.ok().body(roomService.getRoomTask(id));
+        List<HouseKeepingDto> tasks = roomService.getRoomTask(id);
+        tasks.forEach(HouseKeepingController::addLinkToDto);
+
+        return ResponseEntity.ok().body(tasks);
     }
 
     public static void addLinkToDto(RoomDto roomDto) {

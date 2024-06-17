@@ -41,7 +41,7 @@ public class HouseKeepingController {
     @PostMapping
     public ResponseEntity<HouseKeepingDto> createTask(@RequestBody @Validated(OnCreate.class) HouseKeepingDto task) {
         HouseKeepingDto createTask = houseKeepingService.addHouseKeeping(task);
-        addLinkToDto(task);
+        addLinkToDto(createTask);
         return ResponseEntity.ok().body(createTask);
     }
 

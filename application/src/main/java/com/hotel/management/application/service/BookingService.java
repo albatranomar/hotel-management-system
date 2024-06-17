@@ -16,4 +16,6 @@ public interface BookingService {
     void cancelBooking(String bookingId);
     void checkout(String id);
     void checkin(String id);
+    void addRoom(String bookingId, String roomId);
+    void deleteRoom(String bookingId, String roomId);
 }
