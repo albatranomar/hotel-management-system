@@ -20,7 +20,7 @@ public class FacilityServiceImpl implements FacilityService {
 
     @Override
     public FacilityDto getFacilityById(String id) {
-        Facility facility = facilityRepository.findById(id).orElse(null);
+        Facility facility = facilityRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Facility", "id", id));
 
         return mapToDto(facility);
     }
@@ -35,7 +35,7 @@ public class FacilityServiceImpl implements FacilityService {
     public FacilityDto updateFacilityById(String id, FacilityDto facilityDto) {
         Facility facility = facilityRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Facility", "id", id));
         try {
-            facility.setFname(facility.getFname());
+            facility.setFname(facilityDto.getFname());
         } catch (IllegalArgumentException ex) {
             throw new BadRequestException("Invalid value provided.");
         }
