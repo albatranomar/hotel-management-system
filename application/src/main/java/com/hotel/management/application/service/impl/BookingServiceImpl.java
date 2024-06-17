@@ -86,6 +86,10 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public void checkout(String id) {
         Booking booking = bookingRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Booking", "id", id));
+
+        if (!booking.getStatus().equals(Booking.Status.CHECKED_IN))
+            throw new BadRequestException("Must be checked in to check out.");
+
         booking.setStatus(Booking.Status.CHECKED_OUT);
         booking.getPayment().setPayment_status(Payment.Status.PAID);
         bookingRepository.save(booking);
@@ -94,6 +98,10 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public void checkin(String id) {
         Booking booking = bookingRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Booking", "id", id));
+
+        if (!booking.getStatus().equals(Booking.Status.DEFAULT))
+            throw new BadRequestException("Can't check in to this booking.");
+
         booking.setStatus(Booking.Status.CHECKED_IN);
         booking.setPayment(paymentRepository.save(new Payment()));
         bookingRepository.save(booking);
