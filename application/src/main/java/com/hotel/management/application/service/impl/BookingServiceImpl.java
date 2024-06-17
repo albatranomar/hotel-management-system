@@ -4,10 +4,12 @@ import com.hotel.management.application.dto.BookingDto;
 import com.hotel.management.application.dto.RoomDto;
 import com.hotel.management.application.entity.Booking;
 import com.hotel.management.application.entity.Payment;
+import com.hotel.management.application.entity.Room;
 import com.hotel.management.application.exception.BadRequestException;
 import com.hotel.management.application.exception.ResourceNotFoundException;
 import com.hotel.management.application.repository.BookingRepository;
 import com.hotel.management.application.repository.PaymentRepository;
+import com.hotel.management.application.repository.RoomRepository;
 import com.hotel.management.application.service.BookingService;
 import org.springframework.stereotype.Service;
 
@@ -17,10 +19,12 @@ import java.util.List;
 public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
     private final PaymentRepository paymentRepository;
+    private final RoomRepository roomRepository;
 
-    public BookingServiceImpl(BookingRepository bookingRepository, PaymentRepository paymentRepository) {
+    public BookingServiceImpl(BookingRepository bookingRepository, PaymentRepository paymentRepository, RoomRepository roomRepository) {
         this.bookingRepository = bookingRepository;
         this.paymentRepository = paymentRepository;
+        this.roomRepository  = roomRepository;
     }
 
     @Override
@@ -104,6 +108,28 @@ public class BookingServiceImpl implements BookingService {
 
         booking.setStatus(Booking.Status.CHECKED_IN);
         booking.setPayment(paymentRepository.save(new Payment()));
+        bookingRepository.save(booking);
+    }
+
+    @Override
+    public void addRoom(String bookingId, String roomId) {
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new ResourceNotFoundException("Booking", "id", bookingId));
+        Room room = roomRepository.findById(roomId).orElseThrow(() -> new ResourceNotFoundException("Room", "id", roomId));
+        if (booking.getRooms().contains(room))
+            throw new BadRequestException("Booking already has this room.");
+
+        booking.getRooms().add(room);
+        bookingRepository.save(booking);
+    }
+
+    @Override
+    public void deleteRoom(String bookingId, String roomId) {
+        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new ResourceNotFoundException("Booking", "id", bookingId));
+        Room room = roomRepository.findById(roomId).orElseThrow(() -> new ResourceNotFoundException("Room", "id", roomId));
+        if (!booking.getRooms().contains(room))
+            throw new BadRequestException("Booking does not have this room.");
+
+        booking.getRooms().remove(room);
         bookingRepository.save(booking);
     }
 
