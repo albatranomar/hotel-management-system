@@ -16,5 +16,7 @@ public class PaymentDto extends RepresentationModel<PaymentDto> {
     @NotBlank
     private Payment.Status paymentStatus;
 
+    private Double bill;
+
     private BookingDto booking;
 }

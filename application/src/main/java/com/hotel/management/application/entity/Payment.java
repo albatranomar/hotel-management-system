@@ -19,6 +19,9 @@ public class Payment {
     @Enumerated(EnumType.STRING)
     private Status payment_status = Status.PENDING;
 
+    @NotNull
+    private Double bill = 0.0;
+
     @OneToOne(mappedBy = "payment")
     private Booking booking;
 
