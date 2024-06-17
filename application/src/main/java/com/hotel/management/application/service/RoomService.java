@@ -13,4 +13,8 @@ public interface RoomService {
     RoomDto createRoom(RoomDto roomDto);
     boolean roomExistsWithId(String id);
     List<HouseKeepingDto> getRoomTask(String id);
+    void addFeatureToRoom(String roomId, String featureId);
+    void removeFeatureFromRoom(String roomId, String featureId);
+    void addFacilityToRoom(String roomId, String facilityId);
+    void removeFacilityFromRoom(String roomId, String facilityId);
 }
