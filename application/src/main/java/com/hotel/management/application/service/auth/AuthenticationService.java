@@ -14,7 +14,7 @@ public interface AuthenticationService {
     AuthenticationResponseDto register(RegisterRequestDto request);
     AuthenticationResponseDto authenticate(AuthenticationRequestDto request);
     void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException;
-    void changePassword(HttpServletRequest request, HttpServletResponse response, ChangePasswordDto changePasswordDto) throws IOException;
+    void changePassword(HttpServletRequest request, HttpServletResponse response, ChangePasswordDto changePasswordDto);
 
     void logout(HttpServletRequest request);
 

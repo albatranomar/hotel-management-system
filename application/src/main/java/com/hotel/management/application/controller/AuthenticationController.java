@@ -37,13 +37,13 @@ public class AuthenticationController {
     }
 
     @PatchMapping("/change-password")
-    public HttpServletResponse changePassword(HttpServletRequest request, HttpServletResponse response, @Valid @RequestBody ChangePasswordDto changePasswordDto) throws IOException {
+    public HttpServletResponse changePassword(HttpServletRequest request, HttpServletResponse response, @Valid @RequestBody ChangePasswordDto changePasswordDto) {
         authenticationService.changePassword(request, response, changePasswordDto);
         return response;
     }
 
     @PatchMapping("/logout")
-    public HttpServletResponse logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public HttpServletResponse logout(HttpServletRequest request, HttpServletResponse response) {
         authenticationService.logout(request);
         return response;
     }

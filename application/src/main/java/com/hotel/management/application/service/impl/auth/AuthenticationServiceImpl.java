@@ -16,6 +16,7 @@ import com.hotel.management.application.service.auth.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -85,8 +86,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
     }
 
+    @SneakyThrows
     @Override
-    public void changePassword(HttpServletRequest request, HttpServletResponse response, ChangePasswordDto changePasswordDto) throws IOException {
+    public void changePassword(HttpServletRequest request, HttpServletResponse response, ChangePasswordDto changePasswordDto) {
         User user = getUser(request);
 
         if (!passwordEncoder.matches(changePasswordDto.getOldPassword(), user.getPassword()))
