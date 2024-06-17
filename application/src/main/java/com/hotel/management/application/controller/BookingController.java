@@ -1,15 +1,18 @@
 package com.hotel.management.application.controller;
 
 import com.hotel.management.application.dto.BookingDto;
+import com.hotel.management.application.dto.PaymentDto;
 import com.hotel.management.application.dto.RoomDto;
 import com.hotel.management.application.dto.validation.OnCreate;
 import com.hotel.management.application.dto.validation.OnUpdate;
 import com.hotel.management.application.entity.Booking;
+import com.hotel.management.application.entity.Room;
 import com.hotel.management.application.entity.user.Role;
 import com.hotel.management.application.entity.user.User;
 import com.hotel.management.application.exception.BadRequestException;
 import com.hotel.management.application.exception.ResourceNotFoundException;
 import com.hotel.management.application.service.BookingService;
+import com.hotel.management.application.service.RoomService;
 import com.hotel.management.application.service.UserService;
 import com.hotel.management.application.service.auth.AuthenticationService;
 import com.hotel.management.application.service.impl.UserServiceImpl;
@@ -34,6 +37,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 public class BookingController {
     private final BookingService bookingService;
     private final UserService userService;
+    private final RoomService roomService;
     private final AuthenticationService authenticationService;
 
     @GetMapping({"/", ""})
@@ -84,13 +88,30 @@ public class BookingController {
     @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
     public ResponseEntity<BookingDto> createBooking(HttpServletRequest request,
                                                     @RequestBody @Validated(OnCreate.class) BookingDto bookingDto) {
+        if (bookingDto.getStatus() == null)
+            bookingDto.setStatus(Booking.Status.DEFAULT);
+
         User user = authenticationService.getUser(request);
         if (user == null) throw new ResourceNotFoundException("User not found.");
 
         if (user.getRole().equals(Role.CUSTOMER))
             bookingDto.setCustomer(UserServiceImpl.mapToDto(user));
-        else if (bookingDto.getCustomer() == null)
+        else if (bookingDto.getCustomer() == null || bookingDto.getCustomer().getId() == null)
             throw new BadRequestException("Admin users must specify a customer.");
+
+        if (bookingDto.getRooms() != null) {
+            for (int i = 0; i < bookingDto.getRooms().size(); i++) {
+                RoomDto roomDto = bookingDto.getRooms().get(i);
+                if (roomDto.getId() == null)
+                    throw new BadRequestException("Provide room id for each room.");
+
+                RoomDto room = roomService.getRoomById(roomDto.getId());
+                if (room.getStatus().equals(Room.Status.RESERVED))
+                    throw new BadRequestException("Room with id " + roomDto.getId() + " is reserved");
+
+                bookingDto.getRooms().set(i, room);
+            }
+        }
 
         bookingDto.setCustomer(userService.getUserById(bookingDto.getCustomer().getId()));
         BookingDto createdBooking = bookingService.createBooking(bookingDto);
@@ -198,6 +219,18 @@ public class BookingController {
         return ResponseEntity.ok().body("Checked out successfully.");
     }
 
+    @GetMapping("/{id}/payment")
+    @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
+    public ResponseEntity<PaymentDto> getPayment(HttpServletRequest request, @PathVariable String id) {
+        User user = authenticationService.getUser(request);
+        if (user == null) throw new ResourceNotFoundException("User not found.");
+
+        if (user.getRole().equals(Role.CUSTOMER) && !userService.hasBooking(user.getId(), id))
+            throw new AccessDeniedException("Customer can't see reservations of another customer.");
+
+        return ResponseEntity.ok().body(bookingService.getPaymentFor(id));
+    }
+
     public static void addLinkToDto(BookingDto bookingDto, HttpServletRequest request) {
         bookingDto.add(linkTo(methodOn(BookingController.class).getBookingById(request, bookingDto.getId())).withSelfRel());
         bookingDto.add(linkTo(methodOn(BookingController.class).getBookingRooms(request, bookingDto.getId())).withRel("rooms"));
@@ -205,6 +238,7 @@ public class BookingController {
         bookingDto.add(linkTo(methodOn(BookingController.class).cancelBooking(request, bookingDto.getId())).withRel("cancel"));
         bookingDto.add(linkTo(methodOn(BookingController.class).addBookingRoom(request, bookingDto.getId(), null)).withRel("add-room"));
         bookingDto.add(linkTo(methodOn(BookingController.class).removeBookingRoom(request, bookingDto.getId(), null)).withRel("remove-room"));
+        bookingDto.add(linkTo(methodOn(BookingController.class).getPayment(request, bookingDto.getId())).withRel("payment"));
         CustomerController.addLinksToCustomerDto(bookingDto.getCustomer());
         bookingDto.getRooms().forEach(RoomController::addLinkToDto);
     }
