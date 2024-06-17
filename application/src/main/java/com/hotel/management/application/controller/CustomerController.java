@@ -1,7 +1,6 @@
 package com.hotel.management.application.controller;
 
 import com.hotel.management.application.dto.UserDto;
-import com.hotel.management.application.dto.validation.OnCreate;
 import com.hotel.management.application.dto.validation.OnUpdate;
 import com.hotel.management.application.entity.user.User;
 import com.hotel.management.application.exception.ResourceNotFoundException;
@@ -98,7 +97,7 @@ public class CustomerController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Object> deleteStockById(@PathVariable(name = "id") String id) {
+    public ResponseEntity<Object> deleteCustomerById(@PathVariable(name = "id") String id) {
         if (userService.getAllCustomers().stream().noneMatch(userDto -> userDto.getId().equals(id)))
             throw new ResourceNotFoundException("Customer with specified id(" + id + ") not found");
 
