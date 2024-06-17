@@ -39,10 +39,10 @@ public class GlobalAdvise extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(AuthenticationException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ResponseBody
     public ErrorResponseDto handleAuthenticationException(AuthenticationException ex) {
-        return new ErrorResponseDto(HttpStatus.FORBIDDEN.value(), "Forbidden", ex.getMessage());
+        return new ErrorResponseDto(HttpStatus.UNAUTHORIZED.value(), "Unauthorized", ex.getMessage());
     }
 
     @ExceptionHandler(AccessDeniedException.class)
