@@ -11,6 +11,8 @@ import com.hotel.management.application.service.RoomService;
 import com.hotel.management.application.service.UserService;
 import com.hotel.management.application.service.auth.AuthenticationService;
 import com.hotel.management.application.service.impl.BookingServiceImpl;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.RepresentationModel;
@@ -33,12 +35,14 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RequestMapping("/api/v1/search")
 @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
 @RequiredArgsConstructor
+@Tag(name = "Search", description = "Exposes APIs to allow users (ADMIN and CUSTOMER) to search for details of different resources.")
 public class SearchController {
     private final AuthenticationService authenticationService;
     private final BookingService bookingService;
     private final UserService userService;
     private final RoomService roomService;
 
+    @Operation(description = "REST API to give links if no search operation was defined.", summary = "Give basic search links")
     @GetMapping({"/", ""})
     public ResponseEntity<Object> search(HttpServletRequest request) {
         User user = authenticationService.getUser(request);
@@ -53,6 +57,7 @@ public class SearchController {
         return ResponseEntity.ok().body(model);
     }
 
+    @Operation(description = "REST API to search through reservation with a specified filter.", summary = "Search through reservation")
     @GetMapping("/reservations")
     public ResponseEntity<Object> reservations(HttpServletRequest request, @RequestParam MultiValueMap<String, String> options) {
         User user = authenticationService.getUser(request);
@@ -107,6 +112,7 @@ public class SearchController {
         return ResponseEntity.ok().body(bookings.get());
     }
 
+    @Operation(description = "REST API to search through customers with a specified filter.", summary = "Search through customers")
     @GetMapping("/customers")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Object> customers(@RequestParam MultiValueMap<String, String> options) {
@@ -155,6 +161,7 @@ public class SearchController {
         return ResponseEntity.ok().body(customers.get());
     }
 
+    @Operation(description = "REST API to search through rooms with a specified filter.", summary = "Search through rooms")
     @GetMapping("/rooms")
     public ResponseEntity<Object> rooms(HttpServletRequest request, @RequestParam MultiValueMap<String, String> options) {
         User user = authenticationService.getUser(request);

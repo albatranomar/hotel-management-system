@@ -6,6 +6,8 @@ import com.hotel.management.application.entity.user.User;
 import com.hotel.management.application.exception.ResourceNotFoundException;
 import com.hotel.management.application.service.UserService;
 import com.hotel.management.application.service.auth.AuthenticationService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,10 +23,12 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 @RequestMapping("/api/v1/customers")
 @RequiredArgsConstructor
+@Tag(name = "Customer", description = "Exposes APIs to manage customers and all their details.")
 public class CustomerController {
     private final AuthenticationService authenticationService;
     private final UserService userService;
 
+    @Operation(description = "REST API to retrieve all customers.", summary = "Retrieve all customers")
     @GetMapping({"/", ""})
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<UserDto>> getAllCustomers() {
@@ -38,6 +42,7 @@ public class CustomerController {
         }
     }
 
+    @Operation(description = "REST API to retrieve customer by his/her id.", summary = "Retrieve customer")
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserDto> getCustomerById(@PathVariable(name = "id") String id) {
@@ -51,6 +56,7 @@ public class CustomerController {
         return ResponseEntity.ok().body(userDto);
     }
 
+    @Operation(description = "REST API to delete a customer by ID.", summary = "Delete a customer")
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Object> deleteCustomerById(@PathVariable(name = "id") String id) {
@@ -63,6 +69,7 @@ public class CustomerController {
         return ResponseEntity.ok().body("The customer was successfully deleted");
     }
 
+    @Operation(description = "REST API to retrieve details of logged in user.", summary = "Retrieve details of logged in user")
     @GetMapping("/@me")
     @PreAuthorize("hasAnyRole('CUSTOMER')")
     public ResponseEntity<UserDto> getMe(HttpServletRequest request) {
@@ -76,6 +83,7 @@ public class CustomerController {
         return ResponseEntity.ok().body(userDto);
     }
 
+    @Operation(description = "REST API to update details logg in user.", summary = "Update details logg in user")
     @PutMapping("/@me")
     @PreAuthorize("hasAnyRole('CUSTOMER')")
     public ResponseEntity<UserDto> putMe(HttpServletRequest request, @RequestBody @Validated(OnUpdate.class) UserDto newData) {

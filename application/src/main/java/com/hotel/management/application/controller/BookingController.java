@@ -16,6 +16,8 @@ import com.hotel.management.application.service.RoomService;
 import com.hotel.management.application.service.UserService;
 import com.hotel.management.application.service.auth.AuthenticationService;
 import com.hotel.management.application.service.impl.UserServiceImpl;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -34,12 +36,14 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 @RequestMapping("/api/v1/bookings")
 @RequiredArgsConstructor
+@Tag(name = "Booking", description = "Exposes APIs to manage bookings and all their details.")
 public class BookingController {
     private final BookingService bookingService;
     private final UserService userService;
     private final RoomService roomService;
     private final AuthenticationService authenticationService;
 
+    @Operation(description = "REST API to retrieve all bookings.", summary = "Retrieve all bookings")
     @GetMapping({"/", ""})
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<BookingDto>> getAllBookings(HttpServletRequest request,
@@ -76,6 +80,7 @@ public class BookingController {
         return ResponseEntity.ok().body(bookings.get());
     }
 
+    @Operation(description = "REST API to retrieve booking by its ID.", summary = "Retrieve booking by its ID")
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<BookingDto> getBookingById(HttpServletRequest request, @PathVariable String id) {
@@ -84,6 +89,7 @@ public class BookingController {
         return ResponseEntity.ok().body(bookingDto);
     }
 
+    @Operation(description = "REST API to add a new booking to the system.", summary = "Add a new booking")
     @PostMapping({"/", ""})
     @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
     public ResponseEntity<BookingDto> createBooking(HttpServletRequest request,
@@ -119,6 +125,7 @@ public class BookingController {
         return ResponseEntity.ok().body(createdBooking);
     }
 
+    @Operation(description = "REST API to delete a booking from the system by its ID.", summary = "Delete a booking")
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deleteBooking(@PathVariable String id) {
@@ -129,6 +136,7 @@ public class BookingController {
         return ResponseEntity.ok().body("Booking canceled.");
     }
 
+    @Operation(description = "REST API to cancel a booking.", summary = "cancel a booking")
     @PostMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
     public ResponseEntity<String> cancelBooking(HttpServletRequest request, @PathVariable String id) {
@@ -148,6 +156,7 @@ public class BookingController {
         return ResponseEntity.ok().body("Cancel request sent, pending confirmation.");
     }
 
+    @Operation(description = "REST API to update a booking by its ID.", summary = "update a booking")
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
     public ResponseEntity<BookingDto> updateBooking(HttpServletRequest request, @PathVariable String id,
@@ -167,6 +176,7 @@ public class BookingController {
         return ResponseEntity.ok().body(updatedBooking);
     }
 
+    @Operation(description = "REST API to retrieve the rooms of a booking by its ID.", summary = "Retrieve the rooms of a booking")
     @GetMapping("/{id}/rooms")
     @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
     public ResponseEntity<List<RoomDto>> getBookingRooms(HttpServletRequest request, @PathVariable String id) {
@@ -179,6 +189,7 @@ public class BookingController {
         return ResponseEntity.ok().body(bookingService.getBookingRooms(id));
     }
 
+    @Operation(description = "REST API to add a room to a booking by both IDs.", summary = "Add a room to a booking")
     @PostMapping("/{bookingId}/rooms/{roomId}")
     @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
     public ResponseEntity<String> addBookingRoom(HttpServletRequest request, @PathVariable String bookingId, @PathVariable String roomId) {
@@ -192,6 +203,7 @@ public class BookingController {
         return ResponseEntity.ok().body("Room added to booking.");
     }
 
+    @Operation(description = "REST API to remove a room from a booking by both IDs.", summary = "Remove a room from a booking")
     @DeleteMapping("/{bookingId}/rooms/{roomId}")
     @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
     public ResponseEntity<String> removeBookingRoom(HttpServletRequest request, @PathVariable String bookingId, @PathVariable String roomId) {
@@ -205,6 +217,7 @@ public class BookingController {
         return ResponseEntity.ok().body("Room removed from booking.");
     }
 
+    @Operation(description = "REST API to check into a booking by its ID.", summary = "Check into a booking")
     @PostMapping("/{id}/checkin")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> checkin(@PathVariable String id) {
@@ -212,6 +225,7 @@ public class BookingController {
         return ResponseEntity.ok().body("Checked in successfully.");
     }
 
+    @Operation(description = "REST API to check out of a booking by its ID.", summary = "Check out of a booking")
     @PostMapping("/{id}/checkout")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> checkout(@PathVariable String id) {
@@ -219,6 +233,7 @@ public class BookingController {
         return ResponseEntity.ok().body("Checked out successfully.");
     }
 
+    @Operation(description = "REST API to retrieve the payment of a booking by its ID.", summary = "Retrieve the payment of a booking")
     @GetMapping("/{id}/payment")
     @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
     public ResponseEntity<PaymentDto> getPayment(HttpServletRequest request, @PathVariable String id) {
