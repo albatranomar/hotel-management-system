@@ -35,12 +35,7 @@ public class EmployeeController {
 
         if (employees.size() == 0) throw new ResourceNotFoundException("There is currently no employees");
 
-        employees.forEach(employeeDto -> {
-            employeeDto.add(linkTo(methodOn(EmployeeController.class).getEmployeeById(employeeDto.getId())).withSelfRel());
-            employeeDto.add(linkTo(methodOn(EmployeeController.class).getEmployeeTasksById(employeeDto.getId())).withRel("tasks"));
-            employeeDto.add(linkTo(methodOn(EmployeeController.class).updateEmployeeById(employeeDto.getId(), null)).withRel("update"));
-            employeeDto.add(linkTo(methodOn(EmployeeController.class).deleteEmployeeById(employeeDto.getId())).withRel("delete"));
-        });
+        employees.forEach(EmployeeController::addLinksToEmployeeDto);
 
         return ResponseEntity.ok().body(employees);
     }
@@ -52,10 +47,7 @@ public class EmployeeController {
 
         EmployeeDto employee = employeeService.addEmployee(employeeDto);
 
-        employee.add(linkTo(methodOn(EmployeeController.class).getEmployeeById(employee.getId())).withSelfRel());
-        employee.add(linkTo(methodOn(EmployeeController.class).getEmployeeTasksById(employee.getId())).withRel("tasks"));
-        employee.add(linkTo(methodOn(EmployeeController.class).updateEmployeeById(employee.getId(), null)).withRel("update"));
-        employee.add(linkTo(methodOn(EmployeeController.class).deleteEmployeeById(employee.getId())).withRel("delete"));
+        addLinksToEmployeeDto(employee);
 
         return ResponseEntity.ok().body(employee);
     }
@@ -66,10 +58,7 @@ public class EmployeeController {
 
         EmployeeDto employeeDto = employeeService.getEmployeeById(id);
 
-        employeeDto.add(linkTo(methodOn(EmployeeController.class).getEmployeeById(id)).withSelfRel());
-        employeeDto.add(linkTo(methodOn(EmployeeController.class).getEmployeeTasksById(id)).withRel("tasks"));
-        employeeDto.add(linkTo(methodOn(EmployeeController.class).updateEmployeeById(employeeDto.getId(), null)).withRel("update"));
-        employeeDto.add(linkTo(methodOn(EmployeeController.class).deleteEmployeeById(employeeDto.getId())).withRel("delete"));
+        addLinksToEmployeeDto(employeeDto);
 
         return ResponseEntity.ok().body(employeeDto);
     }
@@ -79,6 +68,19 @@ public class EmployeeController {
         if (!employeeService.existsWithId(id)) throw new ResourceNotFoundException("Employee with specified id(" + id + ") not found");
 
         List<HouseKeepingDto> tasks = employeeService.getEmployeeTasks(id);
+
+        tasks.forEach(HouseKeepingController::addLinkToDto);
+
+        return ResponseEntity.ok().body(tasks);
+    }
+
+    @PostMapping("/{id}/tasks")
+    public ResponseEntity<List<HouseKeepingDto>> addNewTaskToEmployee(@PathVariable(name = "id") String id) {
+        if (!employeeService.existsWithId(id)) throw new ResourceNotFoundException("Employee with specified id(" + id + ") not found");
+
+        List<HouseKeepingDto> tasks = employeeService.getEmployeeTasks(id);
+
+        tasks.forEach(HouseKeepingController::addLinkToDto);
 
         return ResponseEntity.ok().body(tasks);
     }
@@ -104,5 +106,12 @@ public class EmployeeController {
 
         employeeService.deleteEmployee(id);
         return ResponseEntity.ok().body("The employee was successfully deleted");
+    }
+
+    public static void addLinksToEmployeeDto(EmployeeDto employee) {
+        employee.add(linkTo(methodOn(EmployeeController.class).getEmployeeById(employee.getId())).withSelfRel());
+        employee.add(linkTo(methodOn(EmployeeController.class).getEmployeeTasksById(employee.getId())).withRel("tasks"));
+        employee.add(linkTo(methodOn(EmployeeController.class).updateEmployeeById(employee.getId(), null)).withRel("update"));
+        employee.add(linkTo(methodOn(EmployeeController.class).deleteEmployeeById(employee.getId())).withRel("delete"));
     }
 }
