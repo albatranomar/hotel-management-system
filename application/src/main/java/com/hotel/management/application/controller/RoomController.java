@@ -98,7 +98,7 @@ public class RoomController {
         return ResponseEntity.ok().body(roomService.getRoomTask(id));
     }
 
-    private static void addLinkToDto(RoomDto roomDto) {
+    public static void addLinkToDto(RoomDto roomDto) {
         roomDto.add(linkTo(methodOn(RoomController.class).getRoomById(roomDto.getId())).withSelfRel());
         roomDto.add(linkTo(methodOn(RoomController.class).getRoomTasks(roomDto.getId())).withRel("tasks"));
         roomDto.add(linkTo(methodOn(RoomController.class).updateRoom(roomDto.getId(), null)).withRel("update"));

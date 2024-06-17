@@ -121,7 +121,7 @@ public class BookingController {
         return ResponseEntity.ok().body("Checked out successfully.");
     }
 
-    private static void addLinkToDto(BookingDto bookingDto) {
+    public static void addLinkToDto(BookingDto bookingDto) {
         bookingDto.add(linkTo(methodOn(BookingController.class).getBookingById(bookingDto.getId())).withSelfRel());
         bookingDto.add(linkTo(methodOn(BookingController.class).getBookingRooms(bookingDto.getId())).withRel("rooms"));
         bookingDto.add(linkTo(methodOn(BookingController.class).updateBooking(bookingDto.getId(), null)).withRel("update"));

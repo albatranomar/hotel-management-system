@@ -61,7 +61,7 @@ public class HouseKeepingController {
         return ResponseEntity.ok().body("Task deleted successfully");
     }
 
-    private static void addLinkToDto(HouseKeepingDto houseKeepingDto) {
+    public static void addLinkToDto(HouseKeepingDto houseKeepingDto) {
         houseKeepingDto.add(linkTo(methodOn(HouseKeepingController.class).getTaskById(houseKeepingDto.getId())).withSelfRel());
         houseKeepingDto.add(linkTo(methodOn(HouseKeepingController.class).updateTask(houseKeepingDto.getId(), null)).withRel("update"));
         houseKeepingDto.add(linkTo(methodOn(HouseKeepingController.class).deleteTask(houseKeepingDto.getId())).withRel("delete"));
