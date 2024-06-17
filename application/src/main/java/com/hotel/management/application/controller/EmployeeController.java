@@ -3,16 +3,12 @@ package com.hotel.management.application.controller;
 import com.hotel.management.application.dto.EmployeeDto;
 import com.hotel.management.application.dto.HouseKeepingDto;
 import com.hotel.management.application.dto.validation.OnCreate;
-import com.hotel.management.application.entity.Employee;
 import com.hotel.management.application.exception.BadRequestException;
 import com.hotel.management.application.exception.ResourceNotFoundException;
 import com.hotel.management.application.service.EmployeeService;
-import com.hotel.management.application.service.HouseKeepingService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.parameters.P;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +23,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @PreAuthorize("hasRole('ADMIN')")
 public class EmployeeController {
     private final EmployeeService employeeService;
-    private final HouseKeepingService houseKeepingService;
 
     @GetMapping({"/", ""})
     public ResponseEntity<List<EmployeeDto>> getAllEmployees() {
@@ -74,11 +69,26 @@ public class EmployeeController {
         return ResponseEntity.ok().body(tasks);
     }
 
-    @PostMapping("/{id}/tasks")
-    public ResponseEntity<List<HouseKeepingDto>> addNewTaskToEmployee(@PathVariable(name = "id") String id) {
-        if (!employeeService.existsWithId(id)) throw new ResourceNotFoundException("Employee with specified id(" + id + ") not found");
+    @PostMapping("/{empId}/tasks/{taskId}")
+    public ResponseEntity<List<HouseKeepingDto>> addNewTaskToEmployee(@PathVariable(name = "empId") String empId, @PathVariable(name = "taskId") String taskId) {
+        if (!employeeService.existsWithId(empId)) throw new ResourceNotFoundException("Employee with specified id(" + empId + ") not found");
 
-        List<HouseKeepingDto> tasks = employeeService.getEmployeeTasks(id);
+        employeeService.addTask(empId, taskId);
+
+        List<HouseKeepingDto> tasks = employeeService.getEmployeeTasks(empId);
+
+        tasks.forEach(HouseKeepingController::addLinkToDto);
+
+        return ResponseEntity.ok().body(tasks);
+    }
+
+    @DeleteMapping("/{empId}/tasks/{taskId}")
+    public ResponseEntity<List<HouseKeepingDto>> deleteTaskFromEmployee(@PathVariable(name = "empId") String empId, @PathVariable(name = "taskId") String taskId) {
+        if (!employeeService.existsWithId(empId)) throw new ResourceNotFoundException("Employee with specified id(" + empId + ") not found");
+
+        employeeService.removeTask(empId, taskId);
+
+        List<HouseKeepingDto> tasks = employeeService.getEmployeeTasks(empId);
 
         tasks.forEach(HouseKeepingController::addLinkToDto);
 
@@ -113,5 +123,7 @@ public class EmployeeController {
         employee.add(linkTo(methodOn(EmployeeController.class).getEmployeeTasksById(employee.getId())).withRel("tasks"));
         employee.add(linkTo(methodOn(EmployeeController.class).updateEmployeeById(employee.getId(), null)).withRel("update"));
         employee.add(linkTo(methodOn(EmployeeController.class).deleteEmployeeById(employee.getId())).withRel("delete"));
+        employee.add(linkTo(methodOn(EmployeeController.class).addNewTaskToEmployee(employee.getId(), null)).withRel("add-task"));
+        employee.add(linkTo(methodOn(EmployeeController.class).deleteTaskFromEmployee(employee.getId(), null)).withRel("remove-task"));
     }
 }
