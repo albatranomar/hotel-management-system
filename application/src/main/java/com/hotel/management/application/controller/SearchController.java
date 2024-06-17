@@ -102,7 +102,7 @@ public class SearchController {
             }
         });
 
-        // TODO: Add links to bookings :)
+        bookings.get().forEach(b -> BookingController.addLinkToDto(b, null));
 
         return ResponseEntity.ok().body(bookings.get());
     }
@@ -150,7 +150,7 @@ public class SearchController {
             }
         });
 
-        customers.get().forEach(customer -> customer.add(linkTo(methodOn(CustomerController.class).getCustomerById(customer.getId())).withSelfRel()));
+        customers.get().forEach(CustomerController::addLinksToCustomerDto);
 
         return ResponseEntity.ok().body(customers.get());
     }
@@ -204,7 +204,7 @@ public class SearchController {
             }
         });
 
-        //customers.get().forEach(customer -> customer.add(linkTo(methodOn(CustomerController.class).getCustomerById(customer.getId())).withSelfRel()));
+        rooms.get().forEach(RoomController::addLinkToDto);
 
         return ResponseEntity.ok().body(rooms.get());
     }
