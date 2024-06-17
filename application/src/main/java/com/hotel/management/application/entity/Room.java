@@ -1,7 +1,6 @@
 package com.hotel.management.application.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,8 +24,8 @@ public class Room {
     private Integer no;
     private String type;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "enum('AVAILABLE','RESERVED') default 'AVAILABLE'")
     private Status status = Status.AVAILABLE;
 
     private Integer capacity;
