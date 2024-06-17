@@ -92,6 +92,7 @@ public class BookingController {
         else if (bookingDto.getCustomer() == null)
             throw new BadRequestException("Admin users must specify a customer.");
 
+        bookingDto.setCustomer(userService.getUserById(bookingDto.getCustomer().getId()));
         BookingDto createdBooking = bookingService.createBooking(bookingDto);
         addLinkToDto(createdBooking, request);
         return ResponseEntity.ok().body(createdBooking);
@@ -204,6 +205,7 @@ public class BookingController {
         bookingDto.add(linkTo(methodOn(BookingController.class).cancelBooking(request, bookingDto.getId())).withRel("cancel"));
         bookingDto.add(linkTo(methodOn(BookingController.class).addBookingRoom(request, bookingDto.getId(), null)).withRel("add-room"));
         bookingDto.add(linkTo(methodOn(BookingController.class).removeBookingRoom(request, bookingDto.getId(), null)).withRel("remove-room"));
+        CustomerController.addLinksToCustomerDto(bookingDto.getCustomer());
         bookingDto.getRooms().forEach(RoomController::addLinkToDto);
     }
 }
