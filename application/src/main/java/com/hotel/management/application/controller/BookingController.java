@@ -157,6 +157,32 @@ public class BookingController {
         return ResponseEntity.ok().body(bookingService.getBookingRooms(id));
     }
 
+    @PostMapping("/{bookingId}/rooms/{roomId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
+    public ResponseEntity<String> addBookingRoom(HttpServletRequest request, @PathVariable String bookingId, @PathVariable String roomId) {
+        User user = authenticationService.getUser(request);
+        if (user == null) throw new ResourceNotFoundException("User not found.");
+
+        if (user.getRole().equals(Role.CUSTOMER) && !userService.hasBooking(user.getId(), bookingId))
+            throw new AccessDeniedException("Customer can't update a reservations of another customer.");
+
+        bookingService.addRoom(bookingId, roomId);
+        return ResponseEntity.ok().body("Room added to booking.");
+    }
+
+    @DeleteMapping("/{bookingId}/rooms/{roomId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
+    public ResponseEntity<String> removeBookingRoom(HttpServletRequest request, @PathVariable String bookingId, @PathVariable String roomId) {
+        User user = authenticationService.getUser(request);
+        if (user == null) throw new ResourceNotFoundException("User not found.");
+
+        if (user.getRole().equals(Role.CUSTOMER) && !userService.hasBooking(user.getId(), bookingId))
+            throw new AccessDeniedException("Customer can't update a reservations of another customer.");
+
+        bookingService.deleteRoom(bookingId, roomId);
+        return ResponseEntity.ok().body("Room removed from booking.");
+    }
+
     @PostMapping("/{id}/checkin")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> checkin(@PathVariable String id) {
