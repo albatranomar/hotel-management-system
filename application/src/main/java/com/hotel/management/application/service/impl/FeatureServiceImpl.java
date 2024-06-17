@@ -20,7 +20,7 @@ public class FeatureServiceImpl implements FeatureService {
 
     @Override
     public FeatureDto getFeatureById(String id) {
-        Feature feature = featureRepository.findById(id).orElse(null);
+        Feature feature = featureRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Feature", "id", id));
 
         return mapToDto(feature);
     }
