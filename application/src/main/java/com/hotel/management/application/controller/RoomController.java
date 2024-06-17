@@ -4,6 +4,7 @@ import com.hotel.management.application.dto.HouseKeepingDto;
 import com.hotel.management.application.dto.RoomDto;
 import com.hotel.management.application.dto.validation.OnCreate;
 import com.hotel.management.application.dto.validation.OnUpdate;
+import com.hotel.management.application.entity.Room;
 import com.hotel.management.application.exception.ResourceNotFoundException;
 import com.hotel.management.application.service.RoomService;
 import lombok.RequiredArgsConstructor;
@@ -70,6 +71,9 @@ public class RoomController {
 
     @PostMapping({"/", ""})
     public ResponseEntity<RoomDto> createRoom(@Validated(OnCreate.class) @RequestBody RoomDto roomDto) {
+        if (roomDto.getStatus() == null)
+            roomDto.setStatus(Room.Status.AVAILABLE);
+
         RoomDto newRoom = roomService.createRoom(roomDto);
         addLinkToDto(newRoom);
         return ResponseEntity.ok().body(newRoom);
