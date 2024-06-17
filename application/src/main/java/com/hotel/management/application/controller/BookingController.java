@@ -202,5 +202,8 @@ public class BookingController {
         bookingDto.add(linkTo(methodOn(BookingController.class).getBookingRooms(request, bookingDto.getId())).withRel("rooms"));
         bookingDto.add(linkTo(methodOn(BookingController.class).updateBooking(request, bookingDto.getId(), null)).withRel("update"));
         bookingDto.add(linkTo(methodOn(BookingController.class).cancelBooking(request, bookingDto.getId())).withRel("cancel"));
+        bookingDto.add(linkTo(methodOn(BookingController.class).addBookingRoom(request, bookingDto.getId(), null)).withRel("add-room"));
+        bookingDto.add(linkTo(methodOn(BookingController.class).removeBookingRoom(request, bookingDto.getId(), null)).withRel("remove-room"));
+        bookingDto.getRooms().forEach(RoomController::addLinkToDto);
     }
 }
