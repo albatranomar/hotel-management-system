@@ -63,7 +63,7 @@ public class Application {
 			if (facilityRepository.findAll().isEmpty()) {
 				for (int i = 1; i <= 10; i++) {
 					Facility facility = new Facility();
-					facility.setFname("Feature " + i);
+					facility.setFname("Facility " + i);
 
 					facilityRepository.save(facility);
 				}
@@ -81,7 +81,6 @@ public class Application {
 					room.setStatus(Room.Status.AVAILABLE);
 					room.setFacilities(new ArrayList<>());
 					room.setFeatures(new ArrayList<>());
-					room = roomRepository.save(room);
 					if (i == 1 || i == 2) {
 						Feature f1 = new Feature();
 						f1.setFname("Room " + i + " feature 1");
@@ -107,6 +106,8 @@ public class Application {
 						room.getFacilities().add(fa1);
 						room.getFacilities().add(fa2);
 					}
+
+					roomRepository.save(room);
 				}
 			}
 
