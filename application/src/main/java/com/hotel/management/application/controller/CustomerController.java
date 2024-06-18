@@ -33,22 +33,15 @@ public class CustomerController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<UserDto>> getAllCustomers() {
         List<UserDto> customers = userService.getAllCustomers();
-        if (customers.size() == 0) {
-            throw new ResourceNotFoundException("There is currently no customers");
-        } else {
-            customers.forEach(CustomerController::addLinksToCustomerDto);
+        customers.forEach(CustomerController::addLinksToCustomerDto);
 
-            return ResponseEntity.ok().body(customers);
-        }
+        return ResponseEntity.ok().body(customers);
     }
 
     @Operation(description = "REST API to retrieve customer by his/her id.", summary = "Retrieve customer")
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserDto> getCustomerById(@PathVariable(name = "id") String id) {
-        if (userService.getAllCustomers().stream().noneMatch(userDto -> userDto.getId().equals(id)))
-            throw new ResourceNotFoundException("Customer with specified id(" + id + ") not found");
-
         UserDto userDto = userService.getUserById(id);
 
         addLinksToCustomerDto(userDto);
@@ -65,11 +58,11 @@ public class CustomerController {
 
         userService.deleteUser(id);
 
-        // TODO: fix the response make it json with some links
         return ResponseEntity.ok().body("The customer was successfully deleted");
     }
 
-    @Operation(description = "REST API to retrieve details of logged in user.", summary = "Retrieve details of logged in user")
+    @Operation(description = "REST API to retrieve details of logged in user.", summary = "Retrieve details of logged" +
+            " in user")
     @GetMapping("/@me")
     @PreAuthorize("hasAnyRole('CUSTOMER')")
     public ResponseEntity<UserDto> getMe(HttpServletRequest request) {
@@ -86,7 +79,8 @@ public class CustomerController {
     @Operation(description = "REST API to update details logg in user.", summary = "Update details logg in user")
     @PutMapping("/@me")
     @PreAuthorize("hasAnyRole('CUSTOMER')")
-    public ResponseEntity<UserDto> putMe(HttpServletRequest request, @RequestBody @Validated(OnUpdate.class) UserDto newData) {
+    public ResponseEntity<UserDto> putMe(HttpServletRequest request,
+                                         @RequestBody @Validated(OnUpdate.class) UserDto newData) {
         User user = authenticationService.getUser(request);
         if (user == null) throw new ResourceNotFoundException("User not found");
 
@@ -105,7 +99,8 @@ public class CustomerController {
     public static void addLinksToMeCustomer(UserDto user) {
         user.add(linkTo(methodOn(CustomerController.class).getMe(null)).withSelfRel());
         user.add(linkTo(methodOn(CustomerController.class).putMe(null, null)).withRel("update"));
-        user.add(linkTo(methodOn(AuthenticationController.class).changePassword(null,  null, null)).withRel("changePassword"));
+        user.add(linkTo(methodOn(AuthenticationController.class).changePassword(null, null, null)).withRel(
+                "changePassword"));
         user.add(linkTo(methodOn(AuthenticationController.class).logout(null, null)).withRel("logout"));
         user.add(linkTo(methodOn(SearchController.class).reservations(null, null)).withRel("bookings"));
     }

@@ -32,8 +32,6 @@ public class EmployeeController {
     public ResponseEntity<List<EmployeeDto>> getAllEmployees() {
         List<EmployeeDto> employees = employeeService.getAllEmployees();
 
-        if (employees.size() == 0) throw new ResourceNotFoundException("There is currently no employees");
-
         employees.forEach(EmployeeController::addLinksToEmployeeDto);
 
         return ResponseEntity.ok().body(employees);
@@ -55,8 +53,6 @@ public class EmployeeController {
     @Operation(description = "REST API to retrieve an employee by ID", summary = "Retrieve an employee")
     @GetMapping("/{id}")
     public ResponseEntity<EmployeeDto> getEmployeeById(@PathVariable(name = "id") String id) {
-        if (!employeeService.existsWithId(id)) throw new ResourceNotFoundException("Employee with specified id(" + id + ") not found");
-
         EmployeeDto employeeDto = employeeService.getEmployeeById(id);
 
         addLinksToEmployeeDto(employeeDto);
