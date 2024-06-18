@@ -21,7 +21,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -93,6 +92,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         if (!passwordEncoder.matches(changePasswordDto.getOldPassword(), user.getPassword()))
             throw new BadRequestException("Wrong password.");
+
+        if (changePasswordDto.getNewPassword().equals(changePasswordDto.getOldPassword()))
+            throw new BadRequestException("New password can't match old password.");
 
         if (!changePasswordDto.getNewPassword().equals(changePasswordDto.getConfirmPassword()))
             throw new BadRequestException("Password and confirmation password don't match.");
