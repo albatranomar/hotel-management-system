@@ -101,7 +101,7 @@ public class EmployeeController {
     }
 
     @Operation(description = "REST API to update employee details by his/her ID", summary = "Update employee details")
-    @PutMapping("/{id}/update")
+    @PutMapping("/{id}")
     public ResponseEntity<EmployeeDto> updateEmployeeById(@PathVariable(name = "id") String id, @RequestBody @Validated(OnCreate.class) EmployeeDto employeeDto) {
         if (!employeeService.existsWithId(id)) throw new ResourceNotFoundException("Employee with specified id(" + id + ") not found");
 
@@ -116,7 +116,7 @@ public class EmployeeController {
     }
 
     @Operation(description = "REST API to delete an employee by ID", summary = "Delete an employee")
-    @DeleteMapping("/{id}/delete")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteEmployeeById(@PathVariable(name = "id") String id) {
         if (!employeeService.existsWithId(id))
             throw new ResourceNotFoundException("Employee with specified id(" + id + ") not found");
