@@ -16,6 +16,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -79,6 +80,10 @@ public class RoomController {
     public ResponseEntity<RoomDto> createRoom(@Validated(OnCreate.class) @RequestBody RoomDto roomDto) {
         if (roomDto.getStatus() == null)
             roomDto.setStatus(Room.Status.AVAILABLE);
+        if (roomDto.getFacilities() == null)
+            roomDto.setFacilities(new ArrayList<>());
+        if (roomDto.getFeatures() == null)
+            roomDto.setFeatures(new ArrayList<>());
 
         RoomDto newRoom = roomService.createRoom(roomDto);
         addLinkToDto(newRoom);

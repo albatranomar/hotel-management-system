@@ -27,6 +27,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -96,6 +97,8 @@ public class BookingController {
                                                     @RequestBody @Validated(OnCreate.class) BookingDto bookingDto) {
         if (bookingDto.getStatus() == null)
             bookingDto.setStatus(Booking.Status.DEFAULT);
+        if (bookingDto.getRooms() == null)
+            bookingDto.setRooms(new ArrayList<>());
 
         User user = authenticationService.getUser(request);
         if (user == null) throw new ResourceNotFoundException("User not found.");
