@@ -16,6 +16,6 @@ public interface UserRepository extends JpaRepository<User, String> {
 
     Optional<User> findByEmail(String email);
 
-    @Query("SELECT b FROM Booking b WHERE b.customer = ?1")
+    @Query("SELECT b FROM Booking b WHERE b.customer.id = ?1")
     List<Booking> getBookings(String userId);
 }
