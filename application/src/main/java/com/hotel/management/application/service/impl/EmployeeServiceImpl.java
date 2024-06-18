@@ -82,8 +82,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (employee.getTasks().contains(task))
             throw new BadRequestException("Employee already has this task.");
 
-        employee.getTasks().add(task);
-        employeeRepository.save(employee);
+        task.setEmployee(employee);
+        houseKeepingRepository.save(task);
     }
 
     @Override
