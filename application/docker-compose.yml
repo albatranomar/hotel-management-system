@@ -21,6 +21,8 @@ services:
       - springapimysql-net
     environment:
       - spring.datasource.url=jdbc:mysql://mysqldb:3306/hotelDB?allowPublicKeyRetrieval=true
+      - spring.datasource.password=admin
+      - spring.datasource.username=admin
     depends_on:
       - mysqldb
 
