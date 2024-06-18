@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Random;
 
 import static com.hotel.management.application.entity.user.Role.ADMIN;
@@ -130,19 +131,21 @@ public class Application {
 					employee.setEmail("employee" + i + "@email.com");
 					employee.setPhoneNo("0" + (543215431 + random.nextInt(543215431)));
 					employee.setSalary(random.nextDouble(999));
+					employee.setTasks(new ArrayList<>());
+
+					employee = employeeRepository.save(employee);
 
 					if (i == 1 || i == 2) {
 						HouseKeeping houseKeeping = new HouseKeeping();
 						houseKeeping.setDate(new Date(System.currentTimeMillis()));
 						houseKeeping.setStatus("IN_PROGRESS");
 						houseKeeping.setTask("Doing stuff for employee " + i);
+						houseKeeping.setRoom(roomRepository.findAll().get(0));
+						houseKeeping.setEmployee(employee);
 
-						houseKeepingRepository.save(houseKeeping);
+						houseKeeping = houseKeepingRepository.save(houseKeeping);
 						employee.getTasks().add(houseKeeping);
 					}
-
-
-					employeeRepository.save(employee);
 				}
 			}
 		};

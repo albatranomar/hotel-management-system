@@ -26,6 +26,6 @@ public class Employee {
 
     private Double salary;
 
-    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.EAGER, targetEntity = HouseKeeping.class)
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.MERGE, fetch = FetchType.EAGER, targetEntity = HouseKeeping.class)
     private List<HouseKeeping> tasks;
 }
