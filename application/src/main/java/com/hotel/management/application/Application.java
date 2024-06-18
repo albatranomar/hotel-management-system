@@ -3,7 +3,6 @@ package com.hotel.management.application;
 import com.hotel.management.application.dto.auth.RegisterRequestDto;
 import com.hotel.management.application.entity.*;
 import com.hotel.management.application.repository.*;
-import com.hotel.management.application.service.HouseKeepingService;
 import com.hotel.management.application.service.auth.AuthenticationService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -80,6 +79,9 @@ public class Application {
 					room.setCost(random.nextDouble(999));
 					room.setCapacity(random.nextInt(10));
 					room.setStatus(Room.Status.AVAILABLE);
+					room.setFacilities(new ArrayList<>());
+					room.setFeatures(new ArrayList<>());
+					room = roomRepository.save(room);
 					if (i == 1 || i == 2) {
 						Feature f1 = new Feature();
 						f1.setFname("Room " + i + " feature 1");
@@ -105,8 +107,6 @@ public class Application {
 						room.getFacilities().add(fa1);
 						room.getFacilities().add(fa2);
 					}
-
-					roomRepository.save(room);
 				}
 			}
 
