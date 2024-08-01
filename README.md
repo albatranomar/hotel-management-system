@@ -4,8 +4,8 @@ The Hotel Management System is designed to streamline operations for both hotel 
 
 ## Authors
 
-- Omar Albatran - 1221344 [@albatranomar](https://www.github.com/albatranomar)
-- Baha Al-khateeb - 1221131 [@bahafn](https://www.github.com/bahafn)
+- Omar Albatran [@albatranomar](https://www.github.com/albatranomar)
+- Baha Al-khateeb [@bahafn](https://www.github.com/bahafn)
 
 
 ## ERD
